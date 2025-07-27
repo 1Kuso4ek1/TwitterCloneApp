@@ -1,0 +1,6 @@
+{
+    "oauth2": {
+        "token_url": "...",
+        "client_id": "..."
+    }
+}
