@@ -11,7 +11,7 @@ Popup {
     anchors.centerIn: parent
 
     width: 400
-    height: contentLayout.implicitHeight + 100
+    height: contentLayout.implicitHeight + 200
 
     Material.background: Material.color(Material.Grey, Material.Shade900)
     Material.roundedScale: Material.MediumScale
@@ -49,7 +49,9 @@ Popup {
             id: contentArea
 
             wrapMode: Text.Wrap
-            //maximumLength: 280
+
+            font.family: "Noto Color Emoji [GOOG]"
+            font.contextFontMerging: true
 
             Layout.fillWidth: true
             Layout.fillHeight: true

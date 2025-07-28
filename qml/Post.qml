@@ -43,16 +43,18 @@ Pane {
                 spacing: 2
 
                 Label {
-                    text: item.user.display_name
+                    text: item.user.display_name || "Unknown User"
 
                     font.bold: true
                     font.pixelSize: 16
+                    font.family: "Noto Color Emoji [GOOG]"
+                    font.contextFontMerging: true
 
                     color: "white"
                 }
 
                 Label {
-                    text: "@" + item.user.username
+                    text: "@" + item.user.username || "unknown_user"
 
                     font.pixelSize: 13
 
@@ -91,6 +93,9 @@ Pane {
                 Layout.fillWidth: true
 
                 font.pixelSize: 15
+                font.family: "Noto Color Emoji [GOOG]"
+                font.contextFontMerging: true
+
                 color: "white"
             }
 

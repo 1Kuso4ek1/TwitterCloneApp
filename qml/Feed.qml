@@ -117,7 +117,7 @@ ColumnLayout {
         delegate: Component {
             Post {
                 item: modelData
-                userId: root.currentUser.id
+                userId: root.currentUser.id || -1
             }
         }
     }

@@ -1,7 +1,6 @@
 #pragma once
 #include "AuthManager.hpp"
 
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequestFactory>
 
@@ -42,6 +41,7 @@ private:
     bool loggedIn{};
 
 private:
+    Config config;
     AuthManager authManager;
 
     QNetworkAccessManager networkManager;

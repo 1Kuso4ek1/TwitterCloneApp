@@ -3,9 +3,9 @@
 
 #include <QDesktopServices>
 
-AuthManager::AuthManager(QObject* parent)
+AuthManager::AuthManager(Config& config, QObject* parent)
     : QObject(parent),
-      config(":/config/config.json"),
+      config(config),
       handler(6969, this)
 {
     handler.setCallbackPath("/oauth");

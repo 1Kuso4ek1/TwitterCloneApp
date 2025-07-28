@@ -11,7 +11,7 @@ class AuthManager final : public QObject
 {
     Q_OBJECT
 public:
-    explicit AuthManager(QObject* parent = nullptr);
+    explicit AuthManager(Config& config, QObject* parent = nullptr);
 
     void login();
     void refresh();
@@ -22,7 +22,7 @@ signals:
     void loginCompleted();
 
 private:
-    Config config;
+    Config& config;
     TokenStorage storage;
 
 private:

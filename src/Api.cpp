@@ -5,9 +5,10 @@
 
 Api::Api(QObject* parent)
     : QObject(parent),
-      authManager(this),
+      config(":/config/config.json"),
+      authManager(config, this),
       networkManager(this),
-      requestFactory({ "http://localhost:8080/api" })
+      requestFactory({ config.getBaseUrl() })
 {
     connect(&authManager, &AuthManager::loginCompleted, this, [this]
     {

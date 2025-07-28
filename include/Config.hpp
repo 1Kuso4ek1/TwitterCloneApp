@@ -18,16 +18,18 @@ public:
         if(json.isNull() || !json.isObject())
             qFatal() << "Invalid config file: " << filePath;
 
+        baseUrl = json["base_url"].toString();
         tokenUrl = json["oauth2"]["token_url"].toString();
         refreshUrl = json["oauth2"]["refresh_url"].toString();
         clientId = json["oauth2"]["client_id"].toString();
     }
 
+    QUrl getBaseUrl() const { return baseUrl; }
     QUrl getTokenUrl() const { return tokenUrl; }
     QUrl getRefreshUrl() const { return refreshUrl; }
     QString getClientId() const { return clientId; }
 
 private:
-    QUrl tokenUrl, refreshUrl;
+    QUrl baseUrl, tokenUrl, refreshUrl;
     QString clientId;
 };

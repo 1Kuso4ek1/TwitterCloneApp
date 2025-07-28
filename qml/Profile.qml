@@ -77,6 +77,8 @@ ColumnLayout {
 
                 font.pixelSize: 18
                 font.bold: true
+                font.family: "Noto Color Emoji [GOOG]"
+                font.contextFontMerging: true
 
                 Layout.fillWidth: true
 
@@ -132,6 +134,8 @@ ColumnLayout {
 
                             font.bold: true
                             font.pixelSize: 28
+                            font.family: "Noto Color Emoji [GOOG]"
+                            font.contextFontMerging: true
 
                             color: "white"
                         }
