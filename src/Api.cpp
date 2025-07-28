@@ -21,7 +21,9 @@ Api::Api(QObject* parent)
 void Api::updateLoginState()
 {
     const auto& [access, refresh] = authManager.getTokenStorage().loadTokens();
-    emit loggedInChanged(loggedIn = !access.isEmpty() && !refresh.isEmpty());
+    loggedIn = !access.isEmpty() && !refresh.isEmpty();
+
+    emit loggedInChanged(loggedIn);
 
     if(loggedIn)
         requestFactory.setBearerToken(access.toLatin1());
@@ -81,6 +83,29 @@ void Api::createPost(const QString& content)
         const auto json = QJsonDocument::fromJson(reply->readAll()).object();
 
         emit postCreated(json.toVariantMap());
+    });
+}
+
+void Api::deletePost(const int postId)
+{
+    if(!loggedIn)
+    {
+        emit errorOccurred("User is not logged in");
+        return;
+    }
+
+    auto req = requestFactory.createRequest("/posts/" + QString::number(postId));
+    req.setMaximumRedirectsAllowed(0);
+
+    auto* reply = networkManager.deleteResource(req);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, postId]
+    {
+        reply->deleteLater();
+        if(handleError(reply->error(), reply->errorString()))
+            return;
+
+        emit postDeleted(postId);
     });
 }
 

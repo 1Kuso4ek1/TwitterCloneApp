@@ -31,6 +31,12 @@ ColumnLayout {
             feed.model.unshift(post);
         }
 
+        function onPostDeleted(postId) {
+            const index = feed.model.findIndex(item => item.id === postId);
+            if(index !== -1)
+                feed.model.splice(index, 1);
+        }
+
         function onErrorOccurred(error) {
             console.error("Error:", error);
         }
@@ -65,6 +71,7 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignLeft
 
                 text: "+"
+
                 font.pixelSize: 24
 
                 width: 24
@@ -107,7 +114,12 @@ ColumnLayout {
         spacing: 20
 
         model: ({})
-        delegate: Post {}
+        delegate: Component {
+            Post {
+                item: modelData
+                userId: root.currentUser.id
+            }
+        }
     }
 
     Timer {

@@ -11,7 +11,7 @@ Popup {
     anchors.centerIn: parent
 
     width: 400
-    height: contentLayout.implicitHeight + 24
+    height: contentLayout.implicitHeight + 100
 
     Material.background: Material.color(Material.Grey, Material.Shade900)
     Material.roundedScale: Material.MediumScale
@@ -21,6 +21,7 @@ Popup {
     focus: true
     dim: true
 
+    onOpened: contentArea.forceActiveFocus()
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     ColumnLayout {
@@ -47,6 +48,9 @@ Popup {
         TextArea {
             id: contentArea
 
+            wrapMode: Text.Wrap
+            //maximumLength: 280
+
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: 120
@@ -54,6 +58,15 @@ Popup {
             color: "white"
 
             placeholderText: "What's new?"
+        }
+
+        Label {
+            text: contentArea.text.length + " / 280"
+
+            Layout.alignment: Qt.AlignRight
+
+            font.pixelSize: 12
+            color: contentArea.text.length >= 280 ? "red" : "white"
         }
 
         RowLayout {
@@ -80,6 +93,11 @@ Popup {
                 Layout.alignment: Qt.AlignVCenter
 
                 onClicked: {
+                    if(contentArea.text.length === 0 || contentArea.text.length > 280) {
+                        contentArea.forceActiveFocus()
+                        return
+                    }
+
                     Api.createPost(contentArea.text)
 
                     contentArea.clear()

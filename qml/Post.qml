@@ -3,7 +3,12 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+import Api
+
 Pane {
+    property int userId
+    property var item
+
     width: feed.width
     implicitHeight: layout.implicitHeight + 50
 
@@ -23,7 +28,7 @@ Pane {
             spacing: 10
 
             Avatar {
-                avatarUrl: modelData.user.avatar_url
+                avatarUrl: item.user.avatar_url
                 size: 40
             }
 
@@ -33,7 +38,7 @@ Pane {
                 spacing: 2
 
                 Label {
-                    text: modelData.user.display_name
+                    text: item.user.display_name
 
                     font.bold: true
                     font.pixelSize: 16
@@ -42,7 +47,7 @@ Pane {
                 }
 
                 Label {
-                    text: "@" + modelData.user.username
+                    text: "@" + item.user.username
 
                     font.pixelSize: 13
 
@@ -50,25 +55,51 @@ Pane {
                 }
             }
 
-            Label {
-                text: modelData.created_at
-                horizontalAlignment: Text.AlignRight
-
+            Item {
                 Layout.fillWidth: true
+            }
 
-                font.pixelSize: 11
-                color: "white"
+            RoundButton {
+                text: "X"
+
+                width: 16
+                height: 16
+
+                font.pixelSize: 12
+
+                Layout.alignment: Qt.AlignRight
+
+                visible: item.user.id === userId
+
+                onClicked: {
+                    Api.deletePost(item.id);
+                }
             }
         }
 
-        Label {
-            text: modelData.content
-            wrapMode: Text.WordWrap
-
+        ColumnLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            font.pixelSize: 15
-            color: "white"
+            Label {
+                text: item.content
+                wrapMode: Text.WordWrap
+
+                Layout.fillWidth: true
+
+                font.pixelSize: 15
+                color: "white"
+            }
+
+            Label {
+                text: item.created_at
+
+                Layout.fillWidth: true
+                Layout.topMargin: 10
+
+                font.pixelSize: 10
+                color: "#606060"
+            }
         }
     }
 }

@@ -19,13 +19,15 @@ public:
     Q_INVOKABLE void login();
     Q_INVOKABLE void getMe();
     Q_INVOKABLE void createPost(const QString& content);
+    Q_INVOKABLE void deletePost(int postId);
     Q_INVOKABLE void getFeed(int limit = 20, int offset = 0);
 
 signals:
     void loggedInChanged(bool loggedIn);
     void profileReceived(const QVariantMap& profile);
-    void feedReceived(const QVariantList& feed);
     void postCreated(const QVariantMap& post);
+    void postDeleted(int postId);
+    void feedReceived(const QVariantList& feed);
 
     void errorOccurred(const QString& error);
 
