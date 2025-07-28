@@ -29,19 +29,30 @@ set(
 
 qt_standard_project_setup(REQUIRES 6.9.1)
 
-qt_add_executable(appTwitterCloneApp
+qt_add_executable(TwitterClone
+    MANUAL_FINALIZATION
+
     ${APPLICATION_SOURCES}
     ${APPLICATION_HEADERS}
+
+    android/AndroidManifest.xml
 )
 
-target_include_directories(appTwitterCloneApp PUBLIC include/)
+if(ANDROID)
+    include(libraries/android_openssl/android_openssl.cmake)
+
+    add_android_openssl_libraries(TwitterClone)
+endif()
+
+
+target_include_directories(TwitterClone PUBLIC include/)
 
 set_source_files_properties(qml/Navigation.qml
     PROPERTIES
     QT_QML_SINGLETON_TYPE TRUE
 )
 
-qt_add_qml_module(appTwitterCloneApp
+qt_add_qml_module(TwitterClone
     URI TwitterCloneApp
     VERSION 1.0
     QML_FILES
@@ -55,7 +66,7 @@ qt_add_qml_module(appTwitterCloneApp
         qml/Profile.qml
 )
 
-qt_add_resources(appTwitterCloneApp
+qt_add_resources(TwitterClone
     "config"
     PREFIX
         "/"
@@ -66,20 +77,23 @@ qt_add_resources(appTwitterCloneApp
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-set_target_properties(appTwitterCloneApp PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appTwitterCloneApp
+set_target_properties(TwitterClone PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.TwitterClone
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+    QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
 )
 
-target_link_libraries(appTwitterCloneApp
+target_link_libraries(TwitterClone
     PRIVATE Qt6::Quick Qt6::NetworkAuth
 )
 
+qt_finalize_executable(TwitterClone)
+
 include(GNUInstallDirs)
-install(TARGETS appTwitterCloneApp
+install(TARGETS TwitterClone
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

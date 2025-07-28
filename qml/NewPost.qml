@@ -10,7 +10,7 @@ Popup {
 
     anchors.centerIn: parent
 
-    width: 400
+    width: 350
     height: contentLayout.implicitHeight + 200
 
     Material.background: Material.color(Material.Grey, Material.Shade900)

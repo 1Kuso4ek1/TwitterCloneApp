@@ -132,8 +132,10 @@ ColumnLayout {
                         Label {
                             text: userProfile.display_name || "Unknown User"
 
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
                             font.bold: true
-                            font.pixelSize: 28
+                            font.pixelSize: 26
                             font.family: "Noto Color Emoji [GOOG]"
                             font.contextFontMerging: true
 
