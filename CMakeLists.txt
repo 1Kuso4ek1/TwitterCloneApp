@@ -9,17 +9,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick NetworkAuth)
 
+set(
+    APPLICATION_HEADERS
+
+    include/AuthManager.hpp
+    include/Config.hpp
+    include/TokenStorage.hpp
+    include/Api.hpp
+)
+
+set(
+    APPLICATION_SOURCES
+
+    src/AuthManager.cpp
+    src/TokenStorage.cpp
+    src/Api.cpp
+    src/main.cpp
+)
+
 qt_standard_project_setup(REQUIRES 6.9.1)
 
 qt_add_executable(appTwitterCloneApp
-    src/main.cpp
-    src/AuthManager.cpp
-    include/AuthManager.hpp
-    include/Config.hpp
-    src/TokenStorage.cpp
-    include/TokenStorage.hpp
-    src/Api.cpp
-    include/Api.hpp
+    ${APPLICATION_SOURCES}
+    ${APPLICATION_HEADERS}
 )
 
 target_include_directories(appTwitterCloneApp PUBLIC include/)
@@ -40,6 +52,7 @@ qt_add_qml_module(appTwitterCloneApp
         qml/Avatar.qml
         qml/Post.qml
         qml/NewPost.qml
+        qml/Profile.qml
 )
 
 qt_add_resources(appTwitterCloneApp

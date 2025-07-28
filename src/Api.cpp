@@ -109,6 +109,23 @@ void Api::deletePost(const int postId)
     });
 }
 
+void Api::getUser(const int userId)
+{
+    const auto req = requestFactory.createRequest("/users/" + QString::number(userId));
+    auto* reply = networkManager.get(req);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]
+    {
+        reply->deleteLater();
+        if(handleError(reply->error(), reply->errorString()))
+            return;
+
+        const auto json = QJsonDocument::fromJson(reply->readAll()).object();
+
+        emit profileReceived(json.toVariantMap());
+    });
+}
+
 void Api::getFeed(const int limit, const int offset)
 {
     if(!loggedIn)
@@ -132,6 +149,26 @@ void Api::getFeed(const int limit, const int offset)
         const auto json = QJsonDocument::fromJson(reply->readAll()).array();
 
         emit feedReceived(json.toVariantList());
+    });
+}
+
+void Api::getUserPosts(const int userId, const int limit, const int offset)
+{
+    const auto req = requestFactory.createRequest(
+        "/posts/user/" + QString::number(userId) + "?limit="
+        + QString::number(limit) + "&offset=" + QString::number(offset));
+
+    auto* reply = networkManager.get(req);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]
+    {
+        reply->deleteLater();
+        if(handleError(reply->error(), reply->errorString()))
+            return;
+
+        const auto json = QJsonDocument::fromJson(reply->readAll()).array();
+
+        emit userPostsReceived(json.toVariantList());
     });
 }
 

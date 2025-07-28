@@ -96,10 +96,10 @@ ColumnLayout {
                 avatarUrl: currentUser.avatar_url
                 size: 40
 
-                /*MouseArea {
+                MouseArea {
                     anchors.fill: parent
-                    onClicked: Navigation.push("Profile.qml", { userId: currentUser.id })
-                }*/
+                    onClicked: Navigation.push("Profile.qml", { userId: currentUser.id, currentUserId: currentUser.id })
+                }
             }
         }
     }

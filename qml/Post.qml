@@ -30,6 +30,11 @@ Pane {
             Avatar {
                 avatarUrl: item.user.avatar_url
                 size: 40
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Navigation.push("Profile.qml", { userId: item.user.id, currentUserId: userId })
+                }
             }
 
             ColumnLayout {
@@ -55,9 +60,7 @@ Pane {
                 }
             }
 
-            Item {
-                Layout.fillWidth: true
-            }
+            Item { Layout.fillWidth: true }
 
             RoundButton {
                 text: "X"
