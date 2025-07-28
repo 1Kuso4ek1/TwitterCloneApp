@@ -80,7 +80,8 @@ Popup {
                 Layout.alignment: Qt.AlignVCenter
 
                 onClicked: {
-                    //Api.createPost(contentArea.text)
+                    Api.createPost(contentArea.text)
+
                     contentArea.clear()
                     newPostPopup.close()
                 }

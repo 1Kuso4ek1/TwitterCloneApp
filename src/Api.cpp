@@ -59,7 +59,29 @@ void Api::getMe()
 
 void Api::createPost(const QString& content)
 {
+    if(!loggedIn)
+    {
+        emit errorOccurred("User is not logged in");
+        return;
+    }
 
+    auto req = requestFactory.createRequest("/posts");
+    req.setMaximumRedirectsAllowed(0);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    const QJsonDocument doc(QJsonObject{ { "content", content } });
+    auto* reply = networkManager.post(req, doc.toJson());
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]
+    {
+        reply->deleteLater();
+        if(handleError(reply->error(), reply->errorString()))
+            return;
+
+        const auto json = QJsonDocument::fromJson(reply->readAll()).object();
+
+        emit postCreated(json.toVariantMap());
+    });
 }
 
 void Api::getFeed(const int limit, const int offset)

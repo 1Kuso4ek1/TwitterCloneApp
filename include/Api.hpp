@@ -25,6 +25,7 @@ signals:
     void loggedInChanged(bool loggedIn);
     void profileReceived(const QVariantMap& profile);
     void feedReceived(const QVariantList& feed);
+    void postCreated(const QVariantMap& post);
 
     void errorOccurred(const QString& error);
 

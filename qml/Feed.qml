@@ -27,6 +27,10 @@ ColumnLayout {
             feed.model = feedData;
         }
 
+        function onPostCreated(post) {
+            feed.model.unshift(post);
+        }
+
         function onErrorOccurred(error) {
             console.error("Error:", error);
         }
@@ -104,5 +108,10 @@ ColumnLayout {
 
         model: ({})
         delegate: Post {}
+    }
+
+    Timer {
+        interval: 30000; running: true; repeat: true
+        onTriggered: Api.getFeed();
     }
 }
