@@ -1,13 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "AuthManager.hpp"
+#include "Api.hpp"
 
 int main(int argc, char *argv[])
 {
     const QGuiApplication app(argc, argv);
 
-    qmlRegisterSingletonType<AuthManager>("AuthManager", 1, 0, "AuthManager", AuthManager::instance);
+    qmlRegisterSingletonType<Api>("Api", 1, 0, "Api", Api::instance);
 
     QQmlApplicationEngine engine;
     QObject::connect(

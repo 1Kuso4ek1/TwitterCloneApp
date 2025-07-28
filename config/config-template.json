@@ -1,6 +1,7 @@
 {
     "oauth2": {
         "token_url": "...",
+        "refresh_url": "...",
         "client_id": "..."
     }
 }

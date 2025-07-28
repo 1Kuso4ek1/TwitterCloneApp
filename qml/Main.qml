@@ -5,15 +5,19 @@ import QtQuick.Controls.Material
 ApplicationWindow {
     width: 640
     height: 480
+
+    minimumWidth: 300
+    minimumHeight: 400
+
     visible: true
     title: qsTr("Twitter Clone")
 
-    Material.theme: Material.Dark
+    Material.theme: Material.System
 
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: Login{}
+        initialItem: Feed{}
 
         Component.onCompleted: Navigation.stackView = stackView
     }

@@ -3,11 +3,30 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-import AuthManager
+import Api
 
 ColumnLayout {
     id: root
     spacing: 0
+
+    Connections {
+        target: Api
+
+        function onLoggedInChanged(loggedIn) {
+            if(loggedIn)
+                Navigation.replace("Feed.qml", {});
+
+            console.log("loggedInChanged:", loggedIn);
+        }
+
+        function onErrorOccurred(error) {
+            console.error("Error:", error);
+        }
+    }
+
+    Component.onCompleted: {
+        Api.updateLoginState();
+    }
 
     ToolBar {
         Layout.fillWidth: true
@@ -42,7 +61,7 @@ ColumnLayout {
             Layout.fillWidth: true
 
             onClicked: {
-                AuthManager.login()
+                Api.login()
             }
         }
     }

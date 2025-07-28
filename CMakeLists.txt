@@ -15,9 +15,18 @@ qt_add_executable(appTwitterCloneApp
     src/AuthManager.cpp
     include/AuthManager.hpp
     include/Config.hpp
+    src/TokenStorage.cpp
+    include/TokenStorage.hpp
+    src/Api.cpp
+    include/Api.hpp
 )
 
 target_include_directories(appTwitterCloneApp PUBLIC include/)
+
+set_source_files_properties(qml/Navigation.qml
+    PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
 
 qt_add_qml_module(appTwitterCloneApp
     URI TwitterCloneApp
@@ -27,6 +36,9 @@ qt_add_qml_module(appTwitterCloneApp
         qml/Feed.qml
         qml/Login.qml
         qml/Navigation.qml
+        qml/Avatar.qml
+        qml/Post.qml
+        qml/NewPost.qml
 )
 
 qt_add_resources(appTwitterCloneApp

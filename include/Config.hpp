@@ -19,13 +19,15 @@ public:
             qFatal() << "Invalid config file: " << filePath;
 
         tokenUrl = json["oauth2"]["token_url"].toString();
+        refreshUrl = json["oauth2"]["refresh_url"].toString();
         clientId = json["oauth2"]["client_id"].toString();
     }
 
     QUrl getTokenUrl() const { return tokenUrl; }
+    QUrl getRefreshUrl() const { return refreshUrl; }
     QString getClientId() const { return clientId; }
 
 private:
-    QUrl tokenUrl;
+    QUrl tokenUrl, refreshUrl;
     QString clientId;
 };

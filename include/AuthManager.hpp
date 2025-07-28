@@ -4,24 +4,26 @@
 #include <QObject>
 #include <QQmlEngine>
 
-#include <qqmlintegration.h>
-
 #include "Config.hpp"
+#include "TokenStorage.hpp"
 
 class AuthManager final : public QObject
 {
     Q_OBJECT
-    QML_SINGLETON
-    QML_ELEMENT
 public:
     explicit AuthManager(QObject* parent = nullptr);
 
-    static AuthManager* instance(QQmlEngine*, QJSEngine*) { return new AuthManager; }
+    void login();
+    void refresh();
 
-    Q_INVOKABLE void login();
+    const TokenStorage& getTokenStorage() const { return storage; }
+
+signals:
+    void loginCompleted();
 
 private:
     Config config;
+    TokenStorage storage;
 
 private:
     QOAuth2AuthorizationCodeFlow oauth;
