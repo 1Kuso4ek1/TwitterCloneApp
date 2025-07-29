@@ -14,7 +14,7 @@ Item {
     Image {
         id: avatar
 
-        source: avatarUrl || "https://picsum.photos/200"
+        source: avatarUrl || "https://i.postimg.cc/HkR3vr08/ptitsa.png"
 
         visible: false
     }

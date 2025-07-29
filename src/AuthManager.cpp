@@ -43,6 +43,9 @@ void AuthManager::login()
 
 void AuthManager::refresh()
 {
+    if(oauth.status() == QAbstractOAuth2::Status::RefreshingToken)
+        return;
+
     oauth.setTokenUrl(config.getRefreshUrl());
     oauth.refreshTokens();
 }

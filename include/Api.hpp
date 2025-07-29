@@ -28,7 +28,7 @@ signals:
     void profileReceived(const QVariantMap& profile);
     void postCreated(const QVariantMap& post);
     void postDeleted(int postId);
-    //void userReceived(const QVariantMap& user);
+    void userReceived(const QVariantMap& user);
     void feedReceived(const QVariantList& feed);
     void userPostsReceived(const QVariantList& posts);
 

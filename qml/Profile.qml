@@ -14,24 +14,34 @@ ColumnLayout {
 
     property var userProfile: ({})
 
+    // We're receiving only posts from the server,
+    // so the 'user' field is empty, but since 'Post'
+    // relies on the 'full' model (with user inside),
+    // we must add the 'user' object received earlier ourselves
+    function addUserToFeed(model) {
+        for(let i = 0; i < model.length; i++)
+            model[i].user = root.userProfile
+    }
+
     Connections {
         target: Api
 
-        function onProfileReceived(profile) {
-            if (profile.id === root.userId)
-                root.userProfile = profile
+        function onUserReceived(user) {
+            if(user.id === root.userId) {
+                root.userProfile = user
+                Api.getUserPosts(root.userId)
+            }
         }
 
         function onUserPostsReceived(posts) {
-            for(let i = 0; i < posts.length; i++)
-                posts[i].user = root.userProfile;
-            feed.model = posts;
+            addUserToFeed(posts)
+            feed.model = posts
         }
 
         function onPostDeleted(postId) {
-            const index = feed.model.findIndex(item => item.id === postId);
+            const index = feed.model.findIndex(item => item.id === postId)
             if(index !== -1)
-                feed.model.splice(index, 1);
+                feed.model.splice(index, 1)
         }
 
         function onErrorOccurred(error) {
@@ -41,7 +51,6 @@ ColumnLayout {
 
     Component.onCompleted: {
         Api.getUser(root.userId)
-        Api.getUserPosts(root.userId)
     }
 
     ToolBar {
@@ -77,7 +86,6 @@ ColumnLayout {
 
                 font.pixelSize: 18
                 font.bold: true
-                font.family: "Noto Color Emoji [GOOG]"
                 font.contextFontMerging: true
 
                 Layout.fillWidth: true
@@ -136,7 +144,6 @@ ColumnLayout {
 
                             font.bold: true
                             font.pixelSize: 26
-                            font.family: "Noto Color Emoji [GOOG]"
                             font.contextFontMerging: true
 
                             color: "white"

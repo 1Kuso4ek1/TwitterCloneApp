@@ -123,7 +123,7 @@ void Api::getUser(const int userId)
 
         const auto json = QJsonDocument::fromJson(reply->readAll()).object();
 
-        emit profileReceived(json.toVariantMap());
+        emit userReceived(json.toVariantMap());
     });
 }
 

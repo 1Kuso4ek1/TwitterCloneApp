@@ -48,9 +48,8 @@ Popup {
         TextArea {
             id: contentArea
 
-            wrapMode: Text.Wrap
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
-            font.family: "Noto Color Emoji [GOOG]"
             font.contextFontMerging: true
 
             Layout.fillWidth: true
@@ -63,12 +62,12 @@ Popup {
         }
 
         Label {
-            text: contentArea.text.length + " / 280"
+            text: contentArea.text.trim().length + " / 280"
 
             Layout.alignment: Qt.AlignRight
 
             font.pixelSize: 12
-            color: contentArea.text.length >= 280 ? "red" : "white"
+            color: contentArea.text.trim().length >= 280 ? "red" : "white"
         }
 
         RowLayout {
@@ -89,18 +88,14 @@ Popup {
             Button {
                 text: "Post"
                 highlighted: true
+                enabled: contentArea.text.trim().length !== 0 && contentArea.text.trim().length <= 280
 
                 Layout.fillWidth: true
                 Layout.preferredWidth: 100
                 Layout.alignment: Qt.AlignVCenter
 
                 onClicked: {
-                    if(contentArea.text.length === 0 || contentArea.text.length > 280) {
-                        contentArea.forceActiveFocus()
-                        return
-                    }
-
-                    Api.createPost(contentArea.text)
+                    Api.createPost(contentArea.text.trim())
 
                     contentArea.clear()
                     newPostPopup.close()

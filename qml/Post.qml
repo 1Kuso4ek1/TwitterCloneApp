@@ -47,7 +47,6 @@ Pane {
 
                     font.bold: true
                     font.pixelSize: 16
-                    font.family: "Noto Color Emoji [GOOG]"
                     font.contextFontMerging: true
 
                     color: "white"
@@ -93,7 +92,6 @@ Pane {
                 Layout.fillWidth: true
 
                 font.pixelSize: 15
-                font.family: "Noto Color Emoji [GOOG]"
                 font.contextFontMerging: true
 
                 color: "white"

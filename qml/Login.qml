@@ -24,14 +24,15 @@ ColumnLayout {
         }
     }
 
-    Component.onCompleted: {
-        Api.updateLoginState();
-    }
+    Component.onCompleted: Api.updateLoginState()
 
     ToolBar {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignTop
         Layout.preferredHeight: 50
+
+        Material.primary: Material.color(Material.Grey, Material.Shade900)
+        Material.elevation: 6
 
         RowLayout {
             anchors.fill: parent
@@ -60,9 +61,7 @@ ColumnLayout {
             text: "Login with Google"
             Layout.fillWidth: true
 
-            onClicked: {
-                Api.login()
-            }
+            onClicked: Api.login()
         }
     }
 }

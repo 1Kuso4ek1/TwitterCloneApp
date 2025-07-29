@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <QFontDatabase>
+
 #include "Api.hpp"
 
 int main(int argc, char *argv[])

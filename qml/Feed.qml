@@ -10,43 +10,50 @@ ColumnLayout {
     spacing: 0
 
     property var currentUser: ({})
+    property bool isLoading: false
 
     Connections {
         target: Api
 
         function onLoggedInChanged(loggedIn) {
             if(!loggedIn)
-                Navigation.replace("Login.qml", {});
+                Navigation.replace("Login.qml", {})
+            else
+                loadData()
         }
 
         function onProfileReceived(profile) {
-            root.currentUser = profile;
+            root.currentUser = profile
         }
 
         function onFeedReceived(feedData) {
-            feed.model = feedData;
+            feed.model = feedData
+            root.isLoading = false
         }
 
         function onPostCreated(post) {
-            feed.model.unshift(post);
+            feed.model.unshift(post)
         }
 
         function onPostDeleted(postId) {
-            const index = feed.model.findIndex(item => item.id === postId);
+            const index = feed.model.findIndex(item => item.id === postId)
             if(index !== -1)
-                feed.model.splice(index, 1);
+                feed.model.splice(index, 1)
         }
 
         function onErrorOccurred(error) {
-            console.error("Error:", error);
+            console.error("Error:", error)
         }
     }
 
-    Component.onCompleted: {
-        Api.updateLoginState();
+    function loadData() {
+        root.isLoading = true
+
         Api.getMe();
         Api.getFeed();
     }
+
+    Component.onCompleted: Api.updateLoginState()
 
     NewPost {
         id: newPostPopup
@@ -104,20 +111,39 @@ ColumnLayout {
         }
     }
 
-    ListView {
-        id: feed
-
+    StackLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.margins: 20
 
-        spacing: 20
+        currentIndex: root.isLoading ? 0 : 1
 
-        model: ({})
-        delegate: Component {
-            Post {
-                item: modelData
-                userId: root.currentUser.id || -1
+        Item {
+            Layout.alignment: Qt.AlignCenter
+
+            BusyIndicator {
+                running: root.isLoading
+
+                Material.accent: Material.color(Material.Blue, Material.Shade500)
+
+                anchors.centerIn: parent
+            }
+        }
+
+        ListView {
+            id: feed
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            spacing: 20
+
+            model: ({})
+            delegate: Component {
+                Post {
+                    item: modelData
+                    userId: root.currentUser.id || -1
+                }
             }
         }
     }
