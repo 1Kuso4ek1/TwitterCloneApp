@@ -96,11 +96,6 @@ ColumnLayout {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-
-            Item {
-                width: backButton.width
-                height: backButton.height
-            }
         }
     }
 

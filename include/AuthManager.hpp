@@ -1,31 +1,18 @@
 #pragma once
-#include <QOAuth2AuthorizationCodeFlow>
-#include <QOAuthHttpServerReplyHandler>
-#include <QObject>
-#include <QQmlEngine>
-
-#include "Config.hpp"
 #include "TokenStorage.hpp"
 
-class AuthManager final : public QObject
+class AuthManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit AuthManager(Config& config, QObject* parent = nullptr);
+    ~AuthManager() override = default;
 
-    void login();
-    void refresh();
+    virtual void login() = 0;
+    virtual void refresh() = 0;
+    virtual void handleCode() = 0;
 
-    const TokenStorage& getTokenStorage() const { return storage; }
+    virtual const TokenStorage& getTokenStorage() const = 0;
 
 signals:
     void loginCompleted();
-
-private:
-    Config& config;
-    TokenStorage storage;
-
-private:
-    QOAuth2AuthorizationCodeFlow oauth;
-    QOAuthHttpServerReplyHandler handler;
 };

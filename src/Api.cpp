@@ -3,10 +3,12 @@
 #include <QJsonArray>
 #include <QNetworkReply>
 
+using namespace Qt::Literals::StringLiterals;
+
 Api::Api(QObject* parent)
     : QObject(parent),
       config(":/config/config.json"),
-      authManager(config, this),
+      authManager(config),
       networkManager(this),
       requestFactory({ config.getBaseUrl() })
 {
@@ -33,6 +35,11 @@ void Api::updateLoginState()
 void Api::login()
 {
     authManager.login();
+}
+
+void Api::handleLoginCode()
+{
+    authManager.handleCode();
 }
 
 void Api::getMe()
@@ -80,7 +87,7 @@ void Api::deletePost(const int postId)
         return;
     }
 
-    auto req = requestFactory.createRequest("/posts/" + QString::number(postId));
+    auto req = requestFactory.createRequest(u"/posts/%1"_s.arg(QString::number(postId)));
     req.setMaximumRedirectsAllowed(0);
 
     executeRequest(networkManager.deleteResource(req), [this, postId](const QByteArray& data)
@@ -91,7 +98,7 @@ void Api::deletePost(const int postId)
 
 void Api::getUser(const int userId)
 {
-    const auto req = requestFactory.createRequest("/users/" + QString::number(userId));
+    const auto req = requestFactory.createRequest(u"/users/%1"_s.arg(QString::number(userId)));
 
     executeRequest(networkManager.get(req), [this](const QByteArray& data)
     {
@@ -107,8 +114,7 @@ void Api::getFeed(const int limit, const int offset)
         return;
     }
 
-    auto req = requestFactory.createRequest(
-        "/posts?limit=" + QString::number(limit) + "&offset=" + QString::number(offset));
+    auto req = requestFactory.createRequest(u"/posts?limit=%1&offset=%2"_s.arg(limit).arg(offset));
     req.setMaximumRedirectsAllowed(0);
 
     executeRequest(networkManager.get(req), [this](const QByteArray& data)
@@ -120,8 +126,7 @@ void Api::getFeed(const int limit, const int offset)
 void Api::getUserPosts(const int userId, const int limit, const int offset)
 {
     const auto req = requestFactory.createRequest(
-        "/posts/user/" + QString::number(userId) + "?limit="
-        + QString::number(limit) + "&offset=" + QString::number(offset));
+        u"/posts/user/%1?limit=%2&offset=%3"_s.arg(userId).arg(limit).arg(offset));
 
     executeRequest(networkManager.get(req), [this](const QByteArray& data)
     {

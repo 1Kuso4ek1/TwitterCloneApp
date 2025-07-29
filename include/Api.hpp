@@ -1,8 +1,16 @@
 #pragma once
-#include "AuthManager.hpp"
+#include <QQmlEngine>
 
 #include <QNetworkReply>
 #include <QNetworkRequestFactory>
+
+#ifndef Q_OS_WASM
+    #include "AuthManagerNative.hpp"
+    using AuthManagerImpl = AuthManagerNative;
+#else
+    #include "AuthManagerWASM.hpp"
+    using AuthManagerImpl = AuthManagerWASM;
+#endif
 
 class Api final : public QObject
 {
@@ -15,6 +23,7 @@ public:
     static Api* instance(QQmlEngine*, QJSEngine*) { return new Api; }
 
     Q_INVOKABLE void updateLoginState();
+    Q_INVOKABLE void handleLoginCode();
     Q_INVOKABLE void login();
     Q_INVOKABLE void getMe();
     Q_INVOKABLE void createPost(const QString& content);
@@ -44,7 +53,7 @@ private:
 
 private:
     Config config;
-    AuthManager authManager;
+    AuthManagerImpl authManager;
 
     QNetworkAccessManager networkManager;
     QNetworkRequestFactory requestFactory;

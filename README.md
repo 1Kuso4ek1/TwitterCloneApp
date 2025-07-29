@@ -32,7 +32,10 @@ It was made using C++, Qt 6.9.1 and QML.
 
 ## C++ business logic
 * `Api`: Singleton class for Api-specific operations.
-* `AuthManager`: Manages the OAuth2 flow.
+* `AuthManager`: Manages the OAuth2 flow (base class).
+* * `AuthManagerNative`: Implementation that uses QOAuth2AuthorizationCodeFlow.
+* * `AuthManagerWASM`: An implementation for WebAssembly built from the ground up.
+* * * `PKCEUtils`: Utilities for PKCE (Proof Key for Code Exchange) flow - used in WASM OAuth2 impl.
 * `Config`: Loads `config.json` configuration.
 * `TokenStorage`: Saves and loads access/refresh tokens.
 

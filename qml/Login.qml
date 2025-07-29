@@ -24,7 +24,10 @@ ColumnLayout {
         }
     }
 
-    Component.onCompleted: Api.updateLoginState()
+    Component.onCompleted: {
+        Api.updateLoginState()
+        Api.handleLoginCode()
+    }
 
     ToolBar {
         Layout.fillWidth: true

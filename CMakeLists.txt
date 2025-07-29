@@ -7,7 +7,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick NetworkAuth)
+if(NOT EMSCRIPTEN)
+    find_package(Qt6 REQUIRED COMPONENTS Quick NetworkAuth)
+else()
+    find_package(Qt6 REQUIRED COMPONENTS Quick)
+endif()
 
 set(
     APPLICATION_HEADERS
@@ -16,16 +20,24 @@ set(
     include/Config.hpp
     include/TokenStorage.hpp
     include/Api.hpp
+    include/PKCEUtils.hpp
 )
 
 set(
     APPLICATION_SOURCES
 
-    src/AuthManager.cpp
     src/TokenStorage.cpp
     src/Api.cpp
     src/main.cpp
 )
+
+if(NOT EMSCRIPTEN)
+    list(APPEND APPLICATION_HEADERS include/AuthManagerNative.hpp)
+    list(APPEND APPLICATION_SOURCES src/AuthManagerNative.cpp)
+else()
+    list(APPEND APPLICATION_HEADERS include/AuthManagerWASM.hpp)
+    list(APPEND APPLICATION_SOURCES src/AuthManagerWASM.cpp)
+endif()
 
 qt_standard_project_setup(REQUIRES 6.9.1)
 
@@ -86,9 +98,15 @@ set_target_properties(TwitterClone PROPERTIES
     QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
 )
 
-target_link_libraries(TwitterClone
-    PRIVATE Qt6::Quick Qt6::NetworkAuth
-)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(TwitterClone
+        PRIVATE Qt6::Quick Qt6::NetworkAuth
+    )
+else()
+    target_link_libraries(TwitterClone
+        PRIVATE Qt6::Quick
+    )
+endif()
 
 qt_finalize_executable(TwitterClone)
 

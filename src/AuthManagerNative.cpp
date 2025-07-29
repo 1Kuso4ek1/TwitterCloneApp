@@ -1,12 +1,14 @@
-#include "AuthManager.hpp"
+#include "AuthManagerNative.hpp"
 #include "Config.hpp"
 
 #include <QDesktopServices>
 
-AuthManager::AuthManager(Config& config, QObject* parent)
-    : QObject(parent),
-      config(config),
-      handler(6969, this)
+#ifdef Q_OS_WASM
+
+#endif
+
+AuthManagerNative::AuthManagerNative(Config& config)
+    : config(config), handler(6969, this)
 {
     handler.setCallbackPath("/oauth");
 
@@ -35,7 +37,7 @@ AuthManager::AuthManager(Config& config, QObject* parent)
     });
 }
 
-void AuthManager::login()
+void AuthManagerNative::login()
 {
     oauth.setTokenUrl(config.getTokenUrl());
 
@@ -45,7 +47,7 @@ void AuthManager::login()
     oauth.grant();
 }
 
-void AuthManager::refresh()
+void AuthManagerNative::refresh()
 {
     if(oauth.status() == QAbstractOAuth2::Status::RefreshingToken)
         return;

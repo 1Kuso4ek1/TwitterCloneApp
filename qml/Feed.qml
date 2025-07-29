@@ -24,6 +24,7 @@ ColumnLayout {
 
         function onProfileReceived(profile) {
             root.currentUser = profile
+            Api.getFeed();
         }
 
         function onFeedReceived(feedData) {
@@ -50,7 +51,6 @@ ColumnLayout {
         root.isLoading = true
 
         Api.getMe();
-        Api.getFeed();
     }
 
     Component.onCompleted: Api.updateLoginState()
@@ -95,7 +95,7 @@ ColumnLayout {
             }
 
             Avatar {
-                avatarUrl: currentUser.avatar_url
+                avatarUrl: root.currentUser.avatar_url
                 size: 40
 
                 MouseArea {
