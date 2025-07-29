@@ -9,6 +9,8 @@
 
 namespace em = emscripten;
 
+using namespace std::string_literals;
+
 AuthManagerWASM::AuthManagerWASM(Config& config)
     : config(config), networkManager(this) {}
 
@@ -79,12 +81,13 @@ void AuthManagerWASM::handleCode()
 void AuthManagerWASM::startAuthFlow(const QString& codeChallenge)
 {
     const auto state = PKCEUtils::generateState();
+    const auto redirect = em::val::global("eval")("(window.location.origin + window.location.pathname)"s).as<std::string>();
 
     QUrl authUrl("https://accounts.google.com/o/oauth2/auth");
 
     QUrlQuery query;
     query.addQueryItem("client_id", config.getClientId());
-    query.addQueryItem("redirect_uri", "http://localhost:30000/TwitterClone.html");
+    query.addQueryItem("redirect_uri", QString::fromStdString(redirect));
     query.addQueryItem("response_type", "code");
     query.addQueryItem("scope", "profile");
     query.addQueryItem("code_challenge", codeChallenge);
