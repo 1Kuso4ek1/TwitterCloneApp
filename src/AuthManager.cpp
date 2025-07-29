@@ -20,6 +20,8 @@ AuthManager::AuthManager(Config& config, QObject* parent)
     {
         oauth.setToken(access);
         oauth.setRefreshToken(refresh);
+
+        handler.close();
     }
 
     connect(&oauth, &QAbstractOAuth2::authorizeWithBrowser, this, &QDesktopServices::openUrl);
@@ -37,8 +39,10 @@ void AuthManager::login()
 {
     oauth.setTokenUrl(config.getTokenUrl());
 
-    if(handler.isListening())
-        oauth.grant();
+    if(!handler.isListening())
+        handler.listen(QHostAddress::Any, 6969);
+
+    oauth.grant();
 }
 
 void AuthManager::refresh()
