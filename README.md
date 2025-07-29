@@ -12,6 +12,12 @@ It was made using C++, Qt 6.9.1 and QML.
 * **Delete posts:** if you don't like what you've written...
 * **Security:** none of the sensitive info is shared with the client (besides access/refresh tokens, lol).
 
+## Showcase
+
+<img src="https://github.com/user-attachments/assets/a7015acb-ac93-46d7-8fab-8eceedd941f0" width=225 height=500>
+<img src="https://github.com/user-attachments/assets/c4c9d8a0-6755-4d0b-87d4-dccc4c4d8b53" width=225 height=500>
+<img src="https://github.com/user-attachments/assets/bc01e396-dee7-4e78-b913-80a9583b2361" width=225 height=500>
+
 ## Project structure
 
 ```
