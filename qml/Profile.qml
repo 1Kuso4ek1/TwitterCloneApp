@@ -13,6 +13,7 @@ ColumnLayout {
     required property int currentUserId
 
     property var userProfile: ({})
+    property bool isLoading: false
 
     // We're receiving only posts from the server,
     // so the 'user' field is empty, but since 'Post'
@@ -36,6 +37,7 @@ ColumnLayout {
         function onUserPostsReceived(posts) {
             addUserToFeed(posts)
             feed.model = posts
+            root.isLoading = false
         }
 
         function onPostDeleted(postId) {
@@ -50,6 +52,7 @@ ColumnLayout {
     }
 
     Component.onCompleted: {
+        root.isLoading = true
         Api.getUser(root.userId)
     }
 
@@ -161,19 +164,38 @@ ColumnLayout {
             }
         }
 
-        ListView {
-            id: feed
-
+        StackLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.margins: 20
 
-            spacing: 20
+            currentIndex: root.isLoading ? 0 : 1
 
-            model: ({})
-            delegate: Post {
-                item: modelData
-                userId: currentUserId
+            Item {
+                Layout.alignment: Qt.AlignCenter
+
+                BusyIndicator {
+                    running: root.isLoading
+
+                    Material.accent: Material.color(Material.Blue, Material.Shade500)
+
+                    anchors.centerIn: parent
+                }
+            }
+
+            ListView {
+                id: feed
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                spacing: 20
+
+                model: ({})
+                delegate: Post {
+                    item: modelData
+                    userId: currentUserId
+                }
             }
         }
     }
