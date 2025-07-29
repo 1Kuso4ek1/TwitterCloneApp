@@ -75,14 +75,9 @@ ColumnLayout {
             anchors.rightMargin: 5
 
             RoundButton {
-                Layout.alignment: Qt.AlignLeft
-
                 text: "+"
 
-                font.pixelSize: 24
-
-                width: 24
-                height: 24
+                font.pixelSize: 20
 
                 onClicked: newPostPopup.open()
             }

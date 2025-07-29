@@ -28,11 +28,18 @@ ApplicationWindow {
 
         Keys.onBackPressed: {
             if(stackView.depth > 1)
-                stackView.pop();
+                stackView.pop()
             else
-                Qt.quit();
+                Qt.quit()
         }
 
         Component.onCompleted: forceActiveFocus()
+    }
+
+    onClosing: (close) => {
+        close.accepted = stackView.depth === 1
+
+        if(!close.accepted)
+            stackView.pop()
     }
 }

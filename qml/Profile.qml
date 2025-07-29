@@ -129,7 +129,7 @@ ColumnLayout {
 
                     Avatar {
                         avatarUrl: userProfile.avatar_url
-                        size: 100
+                        size: 80
                     }
 
                     ColumnLayout {
@@ -143,7 +143,7 @@ ColumnLayout {
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
                             font.bold: true
-                            font.pixelSize: 26
+                            font.pixelSize: 20
                             font.contextFontMerging: true
 
                             color: "white"
@@ -152,7 +152,7 @@ ColumnLayout {
                         Label {
                             text: "@" + userProfile.username || "unknown_user"
 
-                            font.pixelSize: 20
+                            font.pixelSize: 16
 
                             color: "white"
                         }
