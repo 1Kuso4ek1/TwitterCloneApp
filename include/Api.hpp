@@ -35,6 +35,8 @@ signals:
     void errorOccurred(const QString& error);
 
 private:
+    void executeRequest(QNetworkReply* reply, std::function<void(const QByteArray&)> callback);
+
     bool handleError(QNetworkReply::NetworkError error, const QString& message);
 
 private:
