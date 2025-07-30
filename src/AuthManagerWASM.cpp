@@ -19,7 +19,7 @@ void AuthManagerWASM::login()
     const auto codeVerifier = PKCEUtils::generateCodeVerifier();
     const auto codeChallenge = PKCEUtils::generateCodeChallenge(codeVerifier);
 
-    startAuthFlow(codeChallenge);
+    startAuthFlow(codeVerifier, codeChallenge);
 }
 
 void AuthManagerWASM::refresh()
@@ -60,10 +60,11 @@ void AuthManagerWASM::handleCode()
         return;
     }
 
-    const auto state = query.queryItemValue("state");
-    const auto code = query.queryItemValue("code");
+    const auto state = query.queryItemValue("state", QUrl::FullyDecoded);
+    const auto code = query.queryItemValue("code", QUrl::FullyDecoded);
 
     const auto storedState = em::val::global("eval")(u"localStorage.getItem('oauth_state');"_s.toStdString()).as<std::string>();
+    const auto codeVerifier = em::val::global("eval")(u"localStorage.getItem('code_verifier');"_s.toStdString()).as<std::string>();
 
     if(storedState != state)
     {
@@ -71,14 +72,13 @@ void AuthManagerWASM::handleCode()
         return;
     }
 
-    qDebug() << "OAuth code received:" << code;
-
     em::val::global("eval")(u"localStorage.removeItem('oauth_state');"_s.toStdString());
+    em::val::global("eval")(u"localStorage.removeItem('code_verifier');"_s.toStdString());
 
-    getTokens(code);
+    getTokens(code, QString::fromStdString(codeVerifier));
 }
 
-void AuthManagerWASM::startAuthFlow(const QString& codeChallenge)
+void AuthManagerWASM::startAuthFlow(const QString& codeVerifier, const QString& codeChallenge)
 {
     const auto state = PKCEUtils::generateState();
     const auto redirect = em::val::global("eval")("(window.location.origin + window.location.pathname)"s).as<std::string>();
@@ -97,16 +97,23 @@ void AuthManagerWASM::startAuthFlow(const QString& codeChallenge)
     authUrl.setQuery(query);
 
     em::val::global("eval")(u"localStorage.setItem('oauth_state', '%1');"_s.arg(state).toStdString());
+    em::val::global("eval")(u"localStorage.setItem('code_verifier', '%1');"_s.arg(codeVerifier).toStdString());
     em::val::global("eval")(u"window.location.href = '%1';"_s.arg(authUrl.toString()).toStdString());
 }
 
-void AuthManagerWASM::getTokens(const QString& code)
+void AuthManagerWASM::getTokens(const QString& code, const QString& codeVerifier)
 {
     QNetworkRequest request(config.getTokenUrl());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
+    const auto redirect = em::val::global("eval")("(window.location.origin + window.location.pathname)"s).as<std::string>();
+
     QUrlQuery data;
     data.addQueryItem("code", code);
+    data.addQueryItem("client_id", config.getClientId());
+    data.addQueryItem("redirect_uri", QString::fromStdString(redirect));
+    data.addQueryItem("code_verifier", codeVerifier);
+    data.addQueryItem("app_type", "wasm");
 
     auto reply = networkManager.post(request, data.toString(QUrl::FullyEncoded).toUtf8());
 

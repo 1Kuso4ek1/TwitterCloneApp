@@ -17,8 +17,8 @@ public:
     const TokenStorage& getTokenStorage() const override { return storage; }
 
 private:
-    void startAuthFlow(const QString& codeChallenge);
-    void getTokens(const QString& code);
+    void startAuthFlow(const QString& codeVerifier, const QString& codeChallenge);
+    void getTokens(const QString& code, const QString& codeVerifier);
     void acceptTokens(QNetworkReply* reply);
 
 private:
