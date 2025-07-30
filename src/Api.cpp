@@ -7,7 +7,11 @@ using namespace Qt::Literals::StringLiterals;
 
 Api::Api(QObject* parent)
     : QObject(parent),
+#ifndef Q_OS_WASM
       config(":/config/config.json"),
+#else
+      config(":/config/config-wasm.json"),
+#endif
       authManager(config),
       networkManager(this),
       requestFactory({ config.getBaseUrl() })

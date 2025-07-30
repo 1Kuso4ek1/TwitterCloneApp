@@ -85,3 +85,4 @@ CMakeLists.txt.user*
 .vscode
 
 config.json
+config-wasm.json

@@ -78,12 +78,18 @@ qt_add_qml_module(TwitterClone
         qml/Profile.qml
 )
 
+if(NOT EMSCRIPTEN)
+    set(CONFIG_FILE "config/config.json")
+else()
+    set(CONFIG_FILE "config/config-wasm.json")
+endif()
+
 qt_add_resources(TwitterClone
     "config"
     PREFIX
         "/"
     FILES
-        "config/config.json"
+        ${CONFIG_FILE}
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

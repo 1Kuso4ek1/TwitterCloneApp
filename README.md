@@ -51,8 +51,8 @@ It was made using C++, Qt 6.9.1 and QML.
 
 ## Configuration
 
-For this application to work, you'll need to create a `config/config.json` based off of the `config/config-template.json`.  
-You will need to specify some URLs of your backend instance and OAuth2 client id (with the type `Desktop`).
+For this application to work, you'll need to create a `config/config.json` (and `config/config-wasm.json` for building WASM app, because Desktop and Web apps require different kinds of client ids) based off of the `config/config-template.json`.  
+You will need to specify some URLs of your backend instance and OAuth2 client id (with the type `Desktop` or `Web Application`, depending on what you're building).
 
 ```json
 {
@@ -85,6 +85,8 @@ git clone --recursive --shallow-submodules --depth=1 https://github.com/1Kuso4ek
 cd TwitterCloneApp
 mkdir build && cd build
 ```
+
+### Building
 
 Then it's as simple as with every CMake project:
 
