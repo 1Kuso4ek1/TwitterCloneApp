@@ -3,7 +3,7 @@
 
 #include <QFontDatabase>
 
-#include "Api.hpp"
+#include "Api/Api.hpp"
 
 int main(int argc, char *argv[])
 {

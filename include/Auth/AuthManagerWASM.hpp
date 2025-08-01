@@ -1,6 +1,6 @@
 #pragma once
 #include "AuthManager.hpp"
-#include "Config.hpp"
+#include "Utils/Config.hpp"
 
 #include <QNetworkAccessManager>
 

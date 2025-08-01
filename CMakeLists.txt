@@ -16,27 +16,29 @@ endif()
 set(
     APPLICATION_HEADERS
 
-    include/AuthManager.hpp
-    include/Config.hpp
-    include/TokenStorage.hpp
-    include/Api.hpp
-    include/PKCEUtils.hpp
+    include/Auth/AuthManager.hpp
+    include/Utils/Config.hpp
+    include/Utils/TokenStorage.hpp
+    include/Api/Api.hpp
+#    include/Api/AuthApi.hpp
+    include/Utils/PKCEUtils.hpp
 )
 
 set(
     APPLICATION_SOURCES
 
-    src/TokenStorage.cpp
-    src/Api.cpp
+    src/Utils/TokenStorage.cpp
+    src/Api/Api.cpp
+#    src/Api/AuthApi.cpp
     src/main.cpp
 )
 
 if(NOT EMSCRIPTEN)
-    list(APPEND APPLICATION_HEADERS include/AuthManagerNative.hpp)
-    list(APPEND APPLICATION_SOURCES src/AuthManagerNative.cpp)
+    list(APPEND APPLICATION_HEADERS include/Auth/AuthManagerNative.hpp)
+    list(APPEND APPLICATION_SOURCES src/Auth/AuthManagerNative.cpp)
 else()
-    list(APPEND APPLICATION_HEADERS include/AuthManagerWASM.hpp)
-    list(APPEND APPLICATION_SOURCES src/AuthManagerWASM.cpp)
+    list(APPEND APPLICATION_HEADERS include/Auth/AuthManagerWASM.hpp)
+    list(APPEND APPLICATION_SOURCES src/Auth/AuthManagerWASM.cpp)
 endif()
 
 qt_standard_project_setup(REQUIRES 6.9.1)
@@ -57,7 +59,7 @@ if(ANDROID)
 endif()
 
 
-target_include_directories(TwitterClone PUBLIC include/)
+target_include_directories(TwitterClone PUBLIC include/ include/Api)
 
 set_source_files_properties(qml/Navigation.qml
     PROPERTIES

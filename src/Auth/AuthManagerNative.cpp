@@ -1,5 +1,5 @@
-#include "AuthManagerNative.hpp"
-#include "Config.hpp"
+#include "Auth/AuthManagerNative.hpp"
+#include "Utils/Config.hpp"
 
 #include <QDesktopServices>
 
@@ -54,4 +54,12 @@ void AuthManagerNative::refresh()
 
     oauth.setTokenUrl(config.getRefreshUrl());
     oauth.refreshTokens();
+
+    if(oauth.status() == QAbstractOAuth2::Status::NotAuthenticated)
+    {
+        // Change for something better in the future
+        storage.saveTokens({ "", "" });
+
+        emit loginCompleted();
+    }
 }

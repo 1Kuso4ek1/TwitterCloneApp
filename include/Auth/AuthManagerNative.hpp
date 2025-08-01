@@ -5,7 +5,7 @@
 #include <QOAuthHttpServerReplyHandler>
 
 #include "AuthManager.hpp"
-#include "Config.hpp"
+#include "Utils/Config.hpp"
 
 class AuthManagerNative final : public AuthManager
 {

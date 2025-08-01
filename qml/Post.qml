@@ -10,7 +10,6 @@ Pane {
     property var item
 
     width: feed.width
-    implicitHeight: layout.implicitHeight + 50
 
     Material.background: Material.color(Material.Grey, Material.Shade900)
     Material.roundedScale: Material.MediumScale
@@ -20,10 +19,12 @@ Pane {
         id: layout
 
         anchors.fill: parent
-        anchors.margins: 12
+
+        spacing: 10
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
             spacing: 10
 
@@ -42,14 +43,34 @@ Pane {
 
                 spacing: 2
 
-                Label {
-                    text: item.user.display_name || "Unknown User"
+                RowLayout {
+                    Layout.fillWidth: true
 
-                    font.bold: true
-                    font.pixelSize: 16
-                    font.contextFontMerging: true
+                    Label {
+                        text: item.user.display_name || "Unknown User"
 
-                    color: "white"
+                        font.bold: true
+                        font.pixelSize: 16
+                        font.contextFontMerging: true
+
+                        color: "white"
+                    }
+
+                    Label {
+                        text: {
+                            // Since QML's Date does not automatically convert to local time
+                            const utc = new Date(item.created_at);
+                            return (new Date(utc.getTime() - utc.getTimezoneOffset() * 60000))
+                                .toLocaleString(Qt.locale(), "ddd yyyy-MM-dd hh:mm:ss");
+                        }
+
+                        Layout.fillWidth: true
+
+                        font.pixelSize: 10
+                        color: "#606060"
+
+                        elide: Text.ElideRight
+                    }
                 }
 
                 Label {
@@ -64,19 +85,44 @@ Pane {
             Item { Layout.fillWidth: true }
 
             RoundButton {
-                text: "X"
+                text: "ᐧᐧᐧ"
 
-                width: 16
-                height: 16
+                font.pixelSize: 16
 
-                font.pixelSize: 12
+                Layout.alignment: Qt.AlignTop
 
-                Layout.alignment: Qt.AlignRight
-
-                visible: item.user.id === userId
+                background: null
 
                 onClicked: {
-                    Api.deletePost(item.id);
+                    contextMenu.popup()
+                }
+            }
+        }
+
+        Menu {
+            id: contextMenu
+
+            MenuItem {
+                text: "Delete post"
+
+                onClicked: Api.deletePost(item.id)
+                Component.onCompleted: {
+                    if(item.user.id !== userId) {
+                        visible = false
+                        height = 0
+                    }
+                }
+            }
+
+            MenuItem {
+                text: "Follow" + item.user.display_name
+
+                onClicked: {}
+                Component.onCompleted: {
+                    if(item.user.id === userId) {
+                        visible = false
+                        height = 0
+                    }
                 }
             }
         }
@@ -97,14 +143,12 @@ Pane {
                 color: "white"
             }
 
-            Label {
-                text: item.created_at
+            Button {
+                text: (item.liked ? "♥ " : "♡ ") + item.likes_count
 
-                Layout.fillWidth: true
-                Layout.topMargin: 10
+                Layout.preferredHeight: 40
 
-                font.pixelSize: 10
-                color: "#606060"
+                font.pixelSize: 15
             }
         }
     }

@@ -1,5 +1,5 @@
-#include "AuthManagerWASM.hpp"
-#include "PKCEUtils.hpp"
+#include "Auth/AuthManagerWASM.hpp"
+#include "Utils/PKCEUtils.hpp"
 
 #include <emscripten.h>
 #include <emscripten/val.h>

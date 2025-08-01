@@ -5,10 +5,10 @@
 #include <QNetworkRequestFactory>
 
 #ifndef Q_OS_WASM
-    #include "AuthManagerNative.hpp"
+    #include "Auth/AuthManagerNative.hpp"
     using AuthManagerImpl = AuthManagerNative;
 #else
-    #include "AuthManagerWASM.hpp"
+    #include "Auth/AuthManagerWASM.hpp"
     using AuthManagerImpl = AuthManagerWASM;
 #endif
 
