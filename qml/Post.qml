@@ -61,12 +61,14 @@ Pane {
                             // Since QML's Date does not automatically convert to local time
                             const utc = new Date(item.created_at);
                             return (new Date(utc.getTime() - utc.getTimezoneOffset() * 60000))
-                                .toLocaleString(Qt.locale(), "ddd yyyy-MM-dd hh:mm:ss");
+                                .toLocaleString(Qt.locale(), "dd.MM.yyyy hh:mm");
                         }
 
                         Layout.fillWidth: true
 
-                        font.pixelSize: 10
+                        horizontalAlignment: Text.AlignRight
+
+                        font.pixelSize: 12
                         color: "#606060"
 
                         elide: Text.ElideRight
