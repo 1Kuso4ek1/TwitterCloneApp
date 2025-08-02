@@ -23,7 +23,7 @@ ColumnLayout {
         }
 
         function onErrorOccurred(error) {
-            console.error("Error:", error)
+            console.error("Feed.qml: Error:", error)
         }
     }
 
@@ -58,10 +58,12 @@ ColumnLayout {
     function loadData() {
         root.isLoading = true
 
-        Api.getMe();
+        Api.getMe()
     }
 
-    Component.onCompleted: Api.auth.updateLoginState()
+    Component.onCompleted: {
+        Api.auth.updateLoginState()
+    }
 
     NewPost {
         id: newPostPopup
@@ -108,7 +110,7 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: Navigation.push("Profile.qml", { userId: currentUser.id, currentUserId: currentUser.id })
+                    onClicked: Navigation.push("Profile.qml", { userId: root.currentUser.id, currentUserId: root.currentUser.id })
                 }
             }
         }
@@ -153,6 +155,6 @@ ColumnLayout {
 
     Timer {
         interval: 30000; running: true; repeat: true
-        onTriggered: Api.getFeed();
+        onTriggered: Api.getFeed()
     }
 }

@@ -187,6 +187,7 @@ ColumnLayout {
                         text: "Logout"
 
                         onClicked: {
+                            Navigation.pop()
                             Api.auth.logout()
                         }
                     }

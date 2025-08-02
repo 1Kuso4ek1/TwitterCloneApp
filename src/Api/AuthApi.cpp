@@ -8,9 +8,6 @@ AuthApi::AuthApi(Config& config, QObject* parent)
     connect(&authManager, &AuthManager::loginCompleted, this, [this]
     {
         updateLoginState();
-
-        if(!loggedIn)
-            emit errorOccurred("Login failed");
     });
 }
 

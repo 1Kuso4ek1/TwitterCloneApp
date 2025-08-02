@@ -96,6 +96,16 @@ Pane {
                 background: null
 
                 onClicked: {
+                    if(item.user.id === userId) {
+                        deletePostItem.visible = true
+                        followUserItem.visible = false
+                        followUserItem.height = 0
+                    }
+                    else {
+                        deletePostItem.visible = false
+                        deletePostItem.height = 0
+                        followUserItem.visible = true
+                    }
                     contextMenu.popup()
                 }
             }
@@ -104,27 +114,17 @@ Pane {
                 id: contextMenu
 
                 MenuItem {
+                    id: deletePostItem
                     text: "Delete post"
 
                     onClicked: Api.deletePost(item.id)
-                    Component.onCompleted: {
-                        if(item.user.id !== userId) {
-                            visible = false
-                            height = 0
-                        }
-                    }
                 }
 
                 MenuItem {
+                    id: followUserItem
                     text: "Follow " + item.user.display_name
 
                     onClicked: {}
-                    Component.onCompleted: {
-                        if(item.user.id === userId) {
-                            visible = false
-                            height = 0
-                        }
-                    }
                 }
             }
         }

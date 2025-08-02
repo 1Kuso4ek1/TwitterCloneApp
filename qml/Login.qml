@@ -15,19 +15,14 @@ ColumnLayout {
         function onLoggedInChanged(loggedIn) {
             if(loggedIn)
                 Navigation.replace("Feed.qml", {});
-
-            console.log("loggedInChanged:", loggedIn);
         }
 
         function onErrorOccurred(error) {
-            console.error("Error:", error);
+            console.error("Login.qml: Error:", error);
         }
     }
 
-    Component.onCompleted: {
-        Api.auth.updateLoginState()
-        Api.auth.handleLoginCode()
-    }
+    Component.onCompleted: Api.auth.handleLoginCode()
 
     ToolBar {
         Layout.fillWidth: true
@@ -42,6 +37,7 @@ ColumnLayout {
 
             Label {
                 text: "Login"
+
                 font.pixelSize: 18
                 font.bold: true
 
@@ -56,13 +52,26 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.margins: 20
 
-        spacing: 20
+        Layout.alignment: Qt.AlignCenter
+
+        spacing: 50
+
+        Label {
+            text: "TwitterClone"
+
+            font.pixelSize: 32
+            font.bold: true
+
+            color: "white"
+
+            horizontalAlignment: Qt.AlignHCenter
+        }
 
         Button {
             text: "Login with Google"
-            Layout.fillWidth: true
+
+            Layout.alignment: Qt.AlignCenter
 
             onClicked: Api.auth.login()
         }

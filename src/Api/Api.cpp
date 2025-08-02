@@ -16,10 +16,9 @@ Api::Api(QObject* parent)
       networkManager(this),
       requestFactory({ config.getBaseUrl() })
 {
-    connect(&authApi, &AuthApi::loggedInChanged, this, [this](const bool loggedIn)
+    connect(&authApi, &AuthApi::loggedInChanged, this, [this]
     {
-        if(loggedIn)
-            requestFactory.setBearerToken(authApi.getAccessToken());
+        requestFactory.setBearerToken(authApi.getAccessToken());
     });
 }
 
