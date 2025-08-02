@@ -11,6 +11,7 @@ public:
     explicit AuthManagerWASM(Config& config);
 
     void login() override;
+    void logout() override;
     void refresh() override;
     void handleCode() override;
 
@@ -22,9 +23,8 @@ private:
     void acceptTokens(QNetworkReply* reply);
 
 private:
-    QNetworkAccessManager networkManager;
-
-private:
     Config& config;
     TokenStorage storage;
+
+    QNetworkAccessManager networkManager;
 };

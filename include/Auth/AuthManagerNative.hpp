@@ -14,6 +14,7 @@ public:
     explicit AuthManagerNative(Config& config);
 
     void login() override;
+    void logout() override;
     void refresh() override;
     void handleCode() override { /* Not applicable for native */ }
 

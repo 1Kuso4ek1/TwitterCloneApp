@@ -40,11 +40,7 @@ AuthManagerNative::AuthManagerNative(Config& config)
     {
         handler.close();
 
-        oauth.setToken("");
-        oauth.setRefreshToken("");
-        storage.saveTokens({ "", "" });
-
-        emit loginCompleted();
+        logout();
     });
 }
 
@@ -56,6 +52,15 @@ void AuthManagerNative::login()
         handler.listen(QHostAddress::Any, 6969);
 
     oauth.grant();
+}
+
+void AuthManagerNative::logout()
+{
+    oauth.setToken("");
+    oauth.setRefreshToken("");
+    storage.saveTokens({ "", "" });
+
+    emit loginCompleted();
 }
 
 void AuthManagerNative::refresh()

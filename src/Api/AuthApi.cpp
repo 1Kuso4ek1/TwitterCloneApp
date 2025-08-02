@@ -1,5 +1,7 @@
 #include "Api/AuthApi.hpp"
 
+#include <QNetworkAccessManager>
+
 AuthApi::AuthApi(Config& config, QObject* parent)
     : QObject(parent), config(config), authManager(config)
 {
@@ -23,6 +25,11 @@ void AuthApi::updateLoginState()
 void AuthApi::login()
 {
     authManager.login();
+}
+
+void AuthApi::logout()
+{
+    authManager.logout();
 }
 
 void AuthApi::refresh()

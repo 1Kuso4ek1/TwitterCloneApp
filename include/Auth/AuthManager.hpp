@@ -8,6 +8,7 @@ public:
     ~AuthManager() override = default;
 
     virtual void login() = 0;
+    virtual void logout() = 0;
     virtual void refresh() = 0;
     virtual void handleCode() = 0;
 

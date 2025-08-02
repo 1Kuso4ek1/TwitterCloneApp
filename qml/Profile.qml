@@ -105,7 +105,6 @@ ColumnLayout {
 
         Pane {
             Layout.fillWidth: true
-            Layout.preferredHeight: 150
             Layout.margins: 20
 
             Material.background: Material.color(Material.Grey, Material.Shade900)
@@ -114,45 +113,81 @@ ColumnLayout {
 
             z: 1
 
-            ColumnLayout {
-                id: layout
-
+            RowLayout {
                 anchors.fill: parent
-                anchors.margins: 12
 
-                RowLayout {
+                ColumnLayout {
+                    id: layout
+
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-                    spacing: 10
-
-                    Avatar {
-                        avatarUrl: userProfile.avatar_url
-                        size: 80
-                    }
-
-                    ColumnLayout {
+                    RowLayout {
                         Layout.fillWidth: true
 
-                        spacing: 2
+                        spacing: 10
 
-                        Label {
-                            text: userProfile.display_name || "Unknown User"
-
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                            font.bold: true
-                            font.pixelSize: 20
-                            font.contextFontMerging: true
-
-                            color: "white"
+                        Avatar {
+                            avatarUrl: userProfile.avatar_url
+                            size: 80
                         }
 
-                        Label {
-                            text: "@" + userProfile.username || "unknown_user"
+                        ColumnLayout {
+                            Layout.fillWidth: true
 
-                            font.pixelSize: 16
+                            spacing: 2
 
-                            color: "white"
+                            Label {
+                                text: userProfile.display_name || "Unknown User"
+
+                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                                font.bold: true
+                                font.pixelSize: 20
+                                font.contextFontMerging: true
+
+                                color: "white"
+                            }
+
+                            Label {
+                                text: "@" + userProfile.username || "unknown_user"
+
+                                font.pixelSize: 16
+
+                                color: "white"
+                            }
+                        }
+                    }
+                }
+
+                Item { Layout.fillWidth: true }
+
+                RoundButton {
+                    text: "ᐧᐧᐧ"
+
+                    font.pixelSize: 16
+
+                    Layout.alignment: Qt.AlignTop
+
+                    background: null
+
+                    onClicked: {
+                        if(root.userProfile.id !== root.currentUserId) {
+                            contextMenu.visible = false
+                            contextMenu.height = 0
+                        }
+                        contextMenu.popup()
+                    }
+                }
+
+                Menu {
+                    id: contextMenu
+
+                    MenuItem {
+                        text: "Logout"
+
+                        onClicked: {
+                            Api.auth.logout()
                         }
                     }
                 }
@@ -189,7 +224,7 @@ ColumnLayout {
                 model: ({})
                 delegate: Post {
                     item: modelData
-                    userId: currentUserId
+                    userId: root.currentUserId
                 }
             }
         }

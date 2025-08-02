@@ -97,31 +97,31 @@ Pane {
                     contextMenu.popup()
                 }
             }
-        }
 
-        Menu {
-            id: contextMenu
+            Menu {
+                id: contextMenu
 
-            MenuItem {
-                text: "Delete post"
+                MenuItem {
+                    text: "Delete post"
 
-                onClicked: Api.deletePost(item.id)
-                Component.onCompleted: {
-                    if(item.user.id !== userId) {
-                        visible = false
-                        height = 0
+                    onClicked: Api.deletePost(item.id)
+                    Component.onCompleted: {
+                        if(item.user.id !== userId) {
+                            visible = false
+                            height = 0
+                        }
                     }
                 }
-            }
 
-            MenuItem {
-                text: "Follow" + item.user.display_name
+                MenuItem {
+                    text: "Follow " + item.user.display_name
 
-                onClicked: {}
-                Component.onCompleted: {
-                    if(item.user.id === userId) {
-                        visible = false
-                        height = 0
+                    onClicked: {}
+                    Component.onCompleted: {
+                        if(item.user.id === userId) {
+                            visible = false
+                            height = 0
+                        }
                     }
                 }
             }

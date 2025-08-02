@@ -18,6 +18,7 @@ public:
     Q_INVOKABLE void updateLoginState();
     Q_INVOKABLE void handleLoginCode();
     Q_INVOKABLE void login();
+    Q_INVOKABLE void logout();
 
     void refresh();
 

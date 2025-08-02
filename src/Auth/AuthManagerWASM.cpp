@@ -22,6 +22,13 @@ void AuthManagerWASM::login()
     startAuthFlow(codeVerifier, codeChallenge);
 }
 
+void AuthManagerWASM::logout()
+{
+    storage.saveTokens({ "", "" });
+
+    emit loginCompleted();
+}
+
 void AuthManagerWASM::refresh()
 {
     QNetworkRequest request(config.getRefreshUrl());
