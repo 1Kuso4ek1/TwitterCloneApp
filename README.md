@@ -14,9 +14,9 @@ It was made using C++, Qt 6.9.1 and QML.
 
 ## Showcase
 
-<img src="https://github.com/user-attachments/assets/a7015acb-ac93-46d7-8fab-8eceedd941f0" width=225 height=500>
-<img src="https://github.com/user-attachments/assets/c4c9d8a0-6755-4d0b-87d4-dccc4c4d8b53" width=225 height=500>
-<img src="https://github.com/user-attachments/assets/bc01e396-dee7-4e78-b913-80a9583b2361" width=225 height=500>
+<img src="https://github.com/user-attachments/assets/cd9a852d-8f9a-43f5-8a75-8e1e29ada44e" width=225 height=500>
+<img src="https://github.com/user-attachments/assets/3b9b5d97-4fc5-4863-a0ab-ea0f19051e7f" width=225 height=500>
+<img src="https://github.com/user-attachments/assets/d3debb21-e427-46e1-8a36-ec6bec0293d9" width=225 height=500>
 
 ## Project structure
 
