@@ -33,6 +33,7 @@ void AuthManagerWASM::refresh()
 {
     QNetworkRequest request(config.getRefreshUrl());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    request.setMaximumRedirectsAllowed(0);
 
     QUrlQuery data;
     data.addQueryItem("refresh_token", storage.loadTokens().second);
@@ -40,6 +41,12 @@ void AuthManagerWASM::refresh()
     auto reply = networkManager.post(request, data.toString(QUrl::FullyEncoded).toUtf8());
 
     connect(reply, &QNetworkReply::finished, [this, reply] { acceptTokens(reply); });
+    connect(reply, &QNetworkReply::errorOccurred, [this](const QNetworkReply::NetworkError error)
+    {
+        if(error == QNetworkReply::NetworkError::AuthenticationRequiredError
+            || error == QNetworkReply::NetworkError::TooManyRedirectsError)
+            logout();
+    });
 }
 
 void AuthManagerWASM::handleCode()
