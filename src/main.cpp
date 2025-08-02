@@ -9,7 +9,6 @@ int main(int argc, char *argv[])
 {
     const QGuiApplication app(argc, argv);
 
-    qmlRegisterUncreatableType<AuthApi>("Api", 1, 0, "AuthApi", "Only available in the Api singleton");
     qmlRegisterSingletonType<Api>("Api", 1, 0, "Api", Api::instance);
 
     QQmlApplicationEngine engine;

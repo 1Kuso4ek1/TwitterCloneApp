@@ -28,12 +28,16 @@ ColumnLayout {
     }
 
     Connections {
-        target: Api
+        target: Api.users
 
         function onProfileReceived(profile) {
             root.currentUser = profile
             Api.getFeed();
         }
+    }
+
+    Connections {
+        target: Api
 
         function onFeedReceived(feedData) {
             feed.model = feedData
@@ -58,7 +62,7 @@ ColumnLayout {
     function loadData() {
         root.isLoading = true
 
-        Api.getMe()
+        Api.users.getMe()
     }
 
     Component.onCompleted: {

@@ -16,20 +16,24 @@ endif()
 set(
     APPLICATION_HEADERS
 
-    include/Auth/AuthManager.hpp
-    include/Utils/Config.hpp
-    include/Utils/TokenStorage.hpp
     include/Api/Api.hpp
     include/Api/AuthApi.hpp
+    include/Api/UsersApi.hpp
+    include/Auth/AuthManager.hpp
+    include/Utils/Config.hpp
     include/Utils/PKCEUtils.hpp
+    include/Utils/RequestHandler.hpp
+    include/Utils/TokenStorage.hpp
 )
 
 set(
     APPLICATION_SOURCES
 
-    src/Utils/TokenStorage.cpp
     src/Api/Api.cpp
     src/Api/AuthApi.cpp
+    src/Api/UsersApi.cpp
+    src/Utils/RequestHandler.cpp
+    src/Utils/TokenStorage.cpp
     src/main.cpp
 )
 

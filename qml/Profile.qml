@@ -25,7 +25,7 @@ ColumnLayout {
     }
 
     Connections {
-        target: Api
+        target: Api.users
 
         function onUserReceived(user) {
             if(user.id === root.userId) {
@@ -33,6 +33,10 @@ ColumnLayout {
                 Api.getUserPosts(root.userId)
             }
         }
+    }
+
+    Connections {
+        target: Api
 
         function onUserPostsReceived(posts) {
             addUserToFeed(posts)
@@ -53,7 +57,7 @@ ColumnLayout {
 
     Component.onCompleted: {
         root.isLoading = true
-        Api.getUser(root.userId)
+        Api.users.getUser(root.userId)
     }
 
     ToolBar {

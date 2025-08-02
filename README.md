@@ -33,6 +33,7 @@ It was made using C++, Qt 6.9.1 and QML.
 ## C++ business logic
 * `Api`: Singleton class for Api-specific operations.
 * * `Config`: Loads `config.json` configuration.
+* * `RequestHandler`: Helper class that handles network requests and possible errors.
 * * `AuthApi`: Handles authentication-related API calls.
 * * * `AuthManager`: Manages the OAuth2 flow (base class).
 * * * `AuthManagerNative`: Implementation that uses QOAuth2AuthorizationCodeFlow.
