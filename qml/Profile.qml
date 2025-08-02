@@ -253,6 +253,7 @@ ColumnLayout {
                 Layout.fillHeight: true
 
                 spacing: 20
+                snapMode: ListView.SnapToItem
 
                 model: feedModel
                 delegate: Post {

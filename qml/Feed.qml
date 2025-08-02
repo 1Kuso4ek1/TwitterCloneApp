@@ -11,6 +11,7 @@ ColumnLayout {
 
     property var currentUser: ({})
     property bool isLoading: false
+    property bool appended: false
 
     Connections {
         target: Api.auth
@@ -32,7 +33,7 @@ ColumnLayout {
 
         function onProfileReceived(profile) {
             root.currentUser = profile
-            Api.posts.getFeed();
+            Api.posts.getFeed(40);
         }
     }
 
@@ -41,14 +42,23 @@ ColumnLayout {
         target: Api.posts
 
         function onFeedReceived(feedData) {
-            feedModel.clear()
-            for(let i = 0; i < feedData.length; i++)
-                feedModel.append({ post: feedData[i] })
+            for(let i = 0; i < feedData.length; i++) {
+                if(i > feedModel.count - 1) {
+                    feedModel.append({ post: feedData[i] })
+                    root.appended = true
+                }
+                else
+                    feedModel.set(i, { post: feedData[i] })
+            }
+            for(let i = 0; i < feedModel.count - feedData.length; i++)
+                feedModel.remove(feedModel.count - i - 1)
+
             root.isLoading = false
         }
 
         function onPostCreated(post) {
             feedModel.insert(0, { post: post })
+            root.appended = true
         }
 
         function onPostDeleted(postId) {
@@ -174,6 +184,28 @@ ColumnLayout {
             Layout.fillHeight: true
 
             spacing: 20
+            snapMode: ListView.SnapToItem
+
+            property var prev
+
+            // So the view remains stationary when new posts are added with update
+            onContentHeightChanged: {
+                if(!root.appended)
+                    return
+
+                root.appended = false
+
+                const heightDiff = feed.contentHeight - feed.prev
+
+                if(heightDiff > 0 && feed.contentY > 0)
+                    feed.contentY += heightDiff
+
+                feed.prev = feed.contentHeight
+            }
+
+            Component.onCompleted: {
+                feed.prev = feed.contentHeight
+            }
 
             model: feedModel
             delegate: Component {
@@ -193,6 +225,6 @@ ColumnLayout {
 
     Timer {
         interval: 30000; running: true; repeat: true
-        onTriggered: Api.posts.getFeed()
+        onTriggered: Api.posts.getFeed(40) // Remember to add proper pagination
     }
 }

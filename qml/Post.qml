@@ -43,36 +43,14 @@ Pane {
 
                 spacing: 2
 
-                RowLayout {
-                    Layout.fillWidth: true
+                Label {
+                    text: item.user.display_name || "Unknown User"
 
-                    Label {
-                        text: item.user.display_name || "Unknown User"
+                    font.bold: true
+                    font.pixelSize: 16
+                    font.contextFontMerging: true
 
-                        font.bold: true
-                        font.pixelSize: 16
-                        font.contextFontMerging: true
-
-                        color: "white"
-                    }
-
-                    Label {
-                        text: {
-                            // Since QML's Date does not automatically convert to local time
-                            const utc = new Date(item.created_at);
-                            return (new Date(utc.getTime() - utc.getTimezoneOffset() * 60000))
-                                .toLocaleString(Qt.locale(), "dd.MM.yyyy hh:mm");
-                        }
-
-                        Layout.fillWidth: true
-
-                        horizontalAlignment: Text.AlignRight
-
-                        font.pixelSize: 12
-                        color: "#606060"
-
-                        elide: Text.ElideRight
-                    }
+                    color: "white"
                 }
 
                 Label {
@@ -143,6 +121,20 @@ Pane {
                 font.contextFontMerging: true
 
                 color: "white"
+            }
+
+            Label {
+                text: {
+                    // Since QML's Date does not automatically convert to local time
+                    const utc = new Date(item.created_at);
+                    return (new Date(utc.getTime() - utc.getTimezoneOffset() * 60000))
+                        .toLocaleString(Qt.locale(), "dd.MM.yyyy hh:mm");
+                }
+
+                font.pixelSize: 12
+                color: "#606060"
+
+                elide: Text.ElideRight
             }
 
             Button {
