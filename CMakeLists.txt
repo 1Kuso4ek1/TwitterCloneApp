@@ -20,7 +20,7 @@ set(
     include/Utils/Config.hpp
     include/Utils/TokenStorage.hpp
     include/Api/Api.hpp
-#    include/Api/AuthApi.hpp
+    include/Api/AuthApi.hpp
     include/Utils/PKCEUtils.hpp
 )
 
@@ -29,7 +29,7 @@ set(
 
     src/Utils/TokenStorage.cpp
     src/Api/Api.cpp
-#    src/Api/AuthApi.cpp
+    src/Api/AuthApi.cpp
     src/main.cpp
 )
 

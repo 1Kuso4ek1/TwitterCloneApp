@@ -12,43 +12,20 @@ Api::Api(QObject* parent)
 #else
       config(":/config/config-wasm.json"),
 #endif
-      authManager(config),
+      authApi(config, this),
       networkManager(this),
       requestFactory({ config.getBaseUrl() })
 {
-    connect(&authManager, &AuthManager::loginCompleted, this, [this]
+    connect(&authApi, &AuthApi::loggedInChanged, this, [this](const bool loggedIn)
     {
-        updateLoginState();
-
-        if(!loggedIn)
-            emit errorOccurred("Login failed");
+        if(loggedIn)
+            requestFactory.setBearerToken(authApi.getAccessToken());
     });
-}
-
-void Api::updateLoginState()
-{
-    const auto& [access, refresh] = authManager.getTokenStorage().loadTokens();
-    loggedIn = !access.isEmpty() && !refresh.isEmpty();
-
-    emit loggedInChanged(loggedIn);
-
-    if(loggedIn)
-        requestFactory.setBearerToken(access.toLatin1());
-}
-
-void Api::login()
-{
-    authManager.login();
-}
-
-void Api::handleLoginCode()
-{
-    authManager.handleCode();
 }
 
 void Api::getMe()
 {
-    if(!loggedIn)
+    if(!authApi.isLoggedIn())
     {
         emit errorOccurred("User is not logged in");
         return;
@@ -65,7 +42,7 @@ void Api::getMe()
 
 void Api::createPost(const QString& content)
 {
-    if(!loggedIn)
+    if(!authApi.isLoggedIn())
     {
         emit errorOccurred("User is not logged in");
         return;
@@ -85,7 +62,7 @@ void Api::createPost(const QString& content)
 
 void Api::deletePost(const int postId)
 {
-    if(!loggedIn)
+    if(!authApi.isLoggedIn())
     {
         emit errorOccurred("User is not logged in");
         return;
@@ -112,7 +89,7 @@ void Api::getUser(const int userId)
 
 void Api::getFeed(const int limit, const int offset)
 {
-    if(!loggedIn)
+    if(!authApi.isLoggedIn())
     {
         emit errorOccurred("User is not logged in");
         return;
@@ -138,7 +115,7 @@ void Api::getUserPosts(const int userId, const int limit, const int offset)
     });
 }
 
-void Api::executeRequest(QNetworkReply* reply, std::function<void(const QByteArray&)> callback)
+void Api::executeRequest(QNetworkReply* reply, const std::function<void(const QByteArray&)>& callback)
 {
     connect(reply, &QNetworkReply::finished, this, [this, reply, callback]
     {
@@ -158,7 +135,7 @@ bool Api::handleError(const QNetworkReply::NetworkError error, const QString& me
             || error == QNetworkReply::TooManyRedirectsError)
         {
             qDebug() << "Need to refresh tokens";
-            authManager.refresh();
+            authApi.refresh();
             return true;
         }
 

@@ -2,6 +2,7 @@
 #include "Utils/Config.hpp"
 
 #include <QDesktopServices>
+#include <QNetworkAccessManager>
 
 #ifdef Q_OS_WASM
 
@@ -35,6 +36,16 @@ AuthManagerNative::AuthManagerNative(Config& config)
 
         emit loginCompleted();
     });
+    connect(&handler, &QAbstractOAuthReplyHandler::tokenRequestErrorOccurred, this, [this]
+    {
+        handler.close();
+
+        oauth.setToken("");
+        oauth.setRefreshToken("");
+        storage.saveTokens({ "", "" });
+
+        emit loginCompleted();
+    });
 }
 
 void AuthManagerNative::login()
@@ -54,12 +65,4 @@ void AuthManagerNative::refresh()
 
     oauth.setTokenUrl(config.getRefreshUrl());
     oauth.refreshTokens();
-
-    if(oauth.status() == QAbstractOAuth2::Status::NotAuthenticated)
-    {
-        // Change for something better in the future
-        storage.saveTokens({ "", "" });
-
-        emit loginCompleted();
-    }
 }

@@ -4,13 +4,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequestFactory>
 
-#ifndef Q_OS_WASM
-    #include "Auth/AuthManagerNative.hpp"
-    using AuthManagerImpl = AuthManagerNative;
-#else
-    #include "Auth/AuthManagerWASM.hpp"
-    using AuthManagerImpl = AuthManagerWASM;
-#endif
+#include "AuthApi.hpp"
 
 class Api final : public QObject
 {
@@ -22,9 +16,9 @@ public:
 
     static Api* instance(QQmlEngine*, QJSEngine*) { return new Api; }
 
-    Q_INVOKABLE void updateLoginState();
-    Q_INVOKABLE void handleLoginCode();
-    Q_INVOKABLE void login();
+    Q_PROPERTY(AuthApi* auth READ getAuthApi CONSTANT)
+    AuthApi* getAuthApi() { return &authApi; }
+
     Q_INVOKABLE void getMe();
     Q_INVOKABLE void createPost(const QString& content);
     Q_INVOKABLE void deletePost(int postId);
@@ -33,7 +27,6 @@ public:
     Q_INVOKABLE void getUserPosts(int userId, int limit = 20, int offset = 0);
 
 signals:
-    void loggedInChanged(bool loggedIn);
     void profileReceived(const QVariantMap& profile);
     void postCreated(const QVariantMap& post);
     void postDeleted(int postId);
@@ -44,16 +37,13 @@ signals:
     void errorOccurred(const QString& error);
 
 private:
-    void executeRequest(QNetworkReply* reply, std::function<void(const QByteArray&)> callback);
+    void executeRequest(QNetworkReply* reply, const std::function<void(const QByteArray&)>& callback);
 
     bool handleError(QNetworkReply::NetworkError error, const QString& message);
 
 private:
-    bool loggedIn{};
-
-private:
     Config config;
-    AuthManagerImpl authManager;
+    AuthApi authApi;
 
     QNetworkAccessManager networkManager;
     QNetworkRequestFactory requestFactory;

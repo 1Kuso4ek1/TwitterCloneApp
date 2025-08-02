@@ -13,7 +13,7 @@ ColumnLayout {
     property bool isLoading: false
 
     Connections {
-        target: Api
+        target: Api.auth
 
         function onLoggedInChanged(loggedIn) {
             if(!loggedIn)
@@ -21,6 +21,14 @@ ColumnLayout {
             else
                 loadData()
         }
+
+        function onErrorOccurred(error) {
+            console.error("Error:", error)
+        }
+    }
+
+    Connections {
+        target: Api
 
         function onProfileReceived(profile) {
             root.currentUser = profile
@@ -53,7 +61,7 @@ ColumnLayout {
         Api.getMe();
     }
 
-    Component.onCompleted: Api.updateLoginState()
+    Component.onCompleted: Api.auth.updateLoginState()
 
     NewPost {
         id: newPostPopup

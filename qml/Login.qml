@@ -10,7 +10,7 @@ ColumnLayout {
     spacing: 0
 
     Connections {
-        target: Api
+        target: Api.auth
 
         function onLoggedInChanged(loggedIn) {
             if(loggedIn)
@@ -25,8 +25,8 @@ ColumnLayout {
     }
 
     Component.onCompleted: {
-        Api.updateLoginState()
-        Api.handleLoginCode()
+        Api.auth.updateLoginState()
+        Api.auth.handleLoginCode()
     }
 
     ToolBar {
@@ -64,7 +64,7 @@ ColumnLayout {
             text: "Login with Google"
             Layout.fillWidth: true
 
-            onClicked: Api.login()
+            onClicked: Api.auth.login()
         }
     }
 }
