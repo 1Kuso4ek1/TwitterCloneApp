@@ -14,7 +14,7 @@ public:
     bool handleError(QNetworkReply::NetworkError error, const QString& message);
 
 signals:
-    void errorOccurred(const QString& error);
+    void errorOccurred(const QString& error); // Won't really use it inside the QML for now...
 
 private:
     AuthApi& authApi;

@@ -18,8 +18,11 @@ set(
 
     include/Api/Api.hpp
     include/Api/AuthApi.hpp
+    include/Api/PostsApi.hpp
     include/Api/UsersApi.hpp
+
     include/Auth/AuthManager.hpp
+
     include/Utils/Config.hpp
     include/Utils/PKCEUtils.hpp
     include/Utils/RequestHandler.hpp
@@ -31,9 +34,12 @@ set(
 
     src/Api/Api.cpp
     src/Api/AuthApi.cpp
+    src/Api/PostsApi.cpp
     src/Api/UsersApi.cpp
+
     src/Utils/RequestHandler.cpp
     src/Utils/TokenStorage.cpp
+
     src/main.cpp
 )
 

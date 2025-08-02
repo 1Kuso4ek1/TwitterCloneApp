@@ -117,7 +117,7 @@ Pane {
                     id: deletePostItem
                     text: "Delete post"
 
-                    onClicked: Api.deletePost(item.id)
+                    onClicked: Api.posts.deletePost(item.id)
                 }
 
                 MenuItem {

@@ -32,12 +32,12 @@ ColumnLayout {
 
         function onProfileReceived(profile) {
             root.currentUser = profile
-            Api.getFeed();
+            Api.posts.getFeed();
         }
     }
 
     Connections {
-        target: Api
+        target: Api.posts
 
         function onFeedReceived(feedData) {
             feed.model = feedData
@@ -52,10 +52,6 @@ ColumnLayout {
             const index = feed.model.findIndex(item => item.id === postId)
             if(index !== -1)
                 feed.model.splice(index, 1)
-        }
-
-        function onErrorOccurred(error) {
-            console.error("Error:", error)
         }
     }
 
@@ -159,6 +155,6 @@ ColumnLayout {
 
     Timer {
         interval: 30000; running: true; repeat: true
-        onTriggered: Api.getFeed()
+        onTriggered: Api.posts.getFeed()
     }
 }

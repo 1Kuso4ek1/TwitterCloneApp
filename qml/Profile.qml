@@ -30,13 +30,13 @@ ColumnLayout {
         function onUserReceived(user) {
             if(user.id === root.userId) {
                 root.userProfile = user
-                Api.getUserPosts(root.userId)
+                Api.posts.getUserPosts(root.userId)
             }
         }
     }
 
     Connections {
-        target: Api
+        target: Api.posts
 
         function onUserPostsReceived(posts) {
             addUserToFeed(posts)
@@ -48,10 +48,6 @@ ColumnLayout {
             const index = feed.model.findIndex(item => item.id === postId)
             if(index !== -1)
                 feed.model.splice(index, 1)
-        }
-
-        function onErrorOccurred(error) {
-            console.error("Profile Error:", error)
         }
     }
 
