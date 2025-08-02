@@ -36,22 +36,54 @@ ColumnLayout {
         }
     }
 
+    // Get rid of the code duplication in Profile.qml
     Connections {
         target: Api.posts
 
         function onFeedReceived(feedData) {
-            feed.model = feedData
+            feedModel.clear()
+            for(let i = 0; i < feedData.length; i++)
+                feedModel.append({ post: feedData[i] })
             root.isLoading = false
         }
 
         function onPostCreated(post) {
-            feed.model.unshift(post)
+            feedModel.insert(0, { post: post })
         }
 
         function onPostDeleted(postId) {
-            const index = feed.model.findIndex(item => item.id === postId)
-            if(index !== -1)
-                feed.model.splice(index, 1)
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    feedModel.remove(i)
+                    break
+                }
+            }
+        }
+
+        function onPostLiked(postId) {
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    let post = feedModel.get(i).post
+                    post.liked = true
+                    post.likes_count++
+
+                    feedModel.set(i, { post: post })
+                    break
+                }
+            }
+        }
+
+        function onPostUnliked(postId) {
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    let post = feedModel.get(i).post
+                    post.liked = false
+                    post.likes_count--
+
+                    feedModel.set(i, { post: post })
+                    break
+                }
+            }
         }
     }
 
@@ -143,14 +175,20 @@ ColumnLayout {
 
             spacing: 20
 
-            model: ({})
+            model: feedModel
             delegate: Component {
                 Post {
-                    item: modelData
+                    required property var post
+
+                    item: post
                     userId: root.currentUser.id || -1
                 }
             }
         }
+    }
+
+    ListModel {
+        id: feedModel
     }
 
     Timer {

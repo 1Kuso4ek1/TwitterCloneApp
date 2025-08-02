@@ -151,6 +151,13 @@ Pane {
                 Layout.preferredHeight: 40
 
                 font.pixelSize: 15
+
+                onClicked: {
+                    if(item.liked)
+                        Api.posts.unlikePost(item.id)
+                    else
+                        Api.posts.likePost(item.id)
+                }
             }
         }
     }

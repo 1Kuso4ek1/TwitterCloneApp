@@ -19,12 +19,16 @@ public:
     Q_INVOKABLE void deletePost(int postId);
     Q_INVOKABLE void getFeed(int limit = 20, int offset = 0);
     Q_INVOKABLE void getUserPosts(int userId, int limit = 20, int offset = 0);
+    Q_INVOKABLE void likePost(int postId);
+    Q_INVOKABLE void unlikePost(int postId);
 
 signals:
     void postCreated(const QVariantMap& post);
     void postDeleted(int postId);
     void feedReceived(const QVariantList& feed);
     void userPostsReceived(const QVariantList& posts);
+    void postLiked(int postId);
+    void postUnliked(int postId);
 
 private:
     RequestHandler& requestHandler;

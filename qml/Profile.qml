@@ -35,19 +35,51 @@ ColumnLayout {
         }
     }
 
+    // Get rid of the code duplication in Feed.qml
     Connections {
         target: Api.posts
 
         function onUserPostsReceived(posts) {
             addUserToFeed(posts)
-            feed.model = posts
+            feedModel.clear()
+            for(let i = 0; i < posts.length; i++)
+                feedModel.append({ post: posts[i] })
             root.isLoading = false
         }
 
         function onPostDeleted(postId) {
-            const index = feed.model.findIndex(item => item.id === postId)
-            if(index !== -1)
-                feed.model.splice(index, 1)
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    feedModel.remove(i)
+                    break
+                }
+            }
+        }
+
+        function onPostLiked(postId) {
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    let post = feedModel.get(i).post
+                    post.liked = true
+                    post.likes_count++
+
+                    feedModel.set(i, { post: post })
+                    break
+                }
+            }
+        }
+
+        function onPostUnliked(postId) {
+            for(let i = 0; i < feedModel.count; i++) {
+                if(feedModel.get(i).post.id === postId) {
+                    let post = feedModel.get(i).post
+                    post.liked = false
+                    post.likes_count--
+
+                    feedModel.set(i, { post: post })
+                    break
+                }
+            }
         }
     }
 
@@ -222,12 +254,18 @@ ColumnLayout {
 
                 spacing: 20
 
-                model: ({})
+                model: feedModel
                 delegate: Post {
-                    item: modelData
+                    required property var post
+
+                    item: post
                     userId: root.currentUserId
                 }
             }
         }
+    }
+
+    ListModel {
+        id: feedModel
     }
 }
