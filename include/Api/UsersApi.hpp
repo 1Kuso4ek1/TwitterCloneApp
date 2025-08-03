@@ -17,6 +17,8 @@ public:
 
     Q_INVOKABLE void getMe();
     Q_INVOKABLE void getUser(int userId);
+    Q_INVOKABLE void updateMe(const QString& displayName, const QString& username);
+    Q_INVOKABLE void uploadAvatar(const QUrl& path);
 
 signals:
     void profileReceived(const QVariantMap& profile);

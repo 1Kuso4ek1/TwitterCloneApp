@@ -164,11 +164,12 @@ ColumnLayout {
                         Avatar {
                             id: userAvatar
 
-                            avatarUrl: userProfile.avatar_url
+                            avatarUrl: root.userProfile.avatar_url
                             size: 80
 
                             MouseArea {
                                 anchors.fill: parent
+                                enabled: root.userProfile.id === root.currentUserId
                                 onClicked: fileDialog.open()
                             }
                         }
@@ -178,7 +179,8 @@ ColumnLayout {
                             currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
                             onAccepted: {
                                 // Api call
-                                userAvatar.avatarUrl = selectedFile
+                                // userAvatar.avatarUrl = selectedFile
+                                Api.users.uploadAvatar(selectedFile)
                             }
                         }
 
@@ -188,7 +190,7 @@ ColumnLayout {
                             spacing: 2
 
                             Label {
-                                text: userProfile.display_name || "Unknown User"
+                                text: root.userProfile.display_name || "Unknown User"
 
                                 elide: Text.ElideRight
 
@@ -200,7 +202,7 @@ ColumnLayout {
                             }
 
                             Label {
-                                text: "@" + userProfile.username || "unknown_user"
+                                text: "@" + root.userProfile.username || "unknown_user"
 
                                 font.pixelSize: 16
 

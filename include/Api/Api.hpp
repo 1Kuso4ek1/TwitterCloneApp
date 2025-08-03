@@ -23,6 +23,9 @@ public:
     Q_PROPERTY(UsersApi* users READ getUsersApi CONSTANT)
     UsersApi* getUsersApi() { return &usersApi; }
 
+    Q_PROPERTY(RequestHandler* requestHandler READ getRequestHandler CONSTANT)
+    RequestHandler* getRequestHandler() { return &requestHandler; }
+
 private:
     Config config;
     RequestHandler requestHandler;

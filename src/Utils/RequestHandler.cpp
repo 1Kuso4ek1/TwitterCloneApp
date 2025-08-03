@@ -29,7 +29,8 @@ bool RequestHandler::handleError(const QNetworkReply::NetworkError error, const 
             return true;
         }
 
-        emit errorOccurred(message);
+        qDebug() << "Request handler:" << message;
+        emit errorOccurred(message.mid(message.indexOf('-') + 2));
         return true;
     }
     return false;
