@@ -49,6 +49,10 @@ if(NOT EMSCRIPTEN)
 else()
     list(APPEND APPLICATION_HEADERS include/Auth/AuthManagerWASM.hpp)
     list(APPEND APPLICATION_SOURCES src/Auth/AuthManagerWASM.cpp)
+
+    if(ANDROID)
+        set(ANDROID_MANIFEST android/AndroidManifest.xml)
+    endif()
 endif()
 
 qt_standard_project_setup(REQUIRES 6.9.1)
@@ -56,10 +60,10 @@ qt_standard_project_setup(REQUIRES 6.9.1)
 qt_add_executable(TwitterClone
     MANUAL_FINALIZATION
 
-    ${APPLICATION_SOURCES}
     ${APPLICATION_HEADERS}
+    ${APPLICATION_SOURCES}
 
-    android/AndroidManifest.xml
+    ${ANDROID_MANIFEST}
 )
 
 if(ANDROID)

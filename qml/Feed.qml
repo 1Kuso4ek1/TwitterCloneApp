@@ -9,7 +9,7 @@ ColumnLayout {
     id: root
     spacing: 0
 
-    property var currentUser: ({})
+    property var currentUser: ({ id: -1 })
     property bool isLoading: false
     property bool appended: false
 
@@ -148,6 +148,7 @@ ColumnLayout {
 
                 MouseArea {
                     anchors.fill: parent
+                    enabled: root.currentUser.id !== -1
                     onClicked: Navigation.push("Profile.qml", { userId: root.currentUser.id, currentUserId: root.currentUser.id })
                 }
             }
