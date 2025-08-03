@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT EMSCRIPTEN)
     find_package(Qt6 REQUIRED COMPONENTS Quick NetworkAuth)
 else()
-    find_package(Qt6 REQUIRED COMPONENTS Quick)
+    find_package(Qt6 REQUIRED COMPONENTS Quick Widgets)
 endif()
 
 set(
@@ -128,7 +128,7 @@ if(NOT EMSCRIPTEN)
     )
 else()
     target_link_libraries(TwitterClone
-        PRIVATE Qt6::Quick
+        PRIVATE Qt6::Quick Qt6::Widgets
     )
 endif()
 

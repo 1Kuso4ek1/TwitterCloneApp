@@ -170,7 +170,12 @@ ColumnLayout {
                             MouseArea {
                                 anchors.fill: parent
                                 enabled: root.userProfile.id === root.currentUserId
-                                onClicked: fileDialog.open()
+                                onClicked: {
+                                    if(Qt.platform.os === "wasm")
+                                        Api.users.uploadAvatar("")
+                                    else
+                                        fileDialog.open()
+                                }
                             }
                         }
 

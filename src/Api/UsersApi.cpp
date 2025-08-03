@@ -3,6 +3,10 @@
 #include <QFileInfo>
 #include <QHttpMultiPart>
 
+#ifdef Q_OS_WASM
+    #include <QFileDialog>
+#endif
+
 using namespace Qt::Literals::StringLiterals;
 
 UsersApi::UsersApi(
@@ -57,20 +61,34 @@ void UsersApi::updateMe(const QString& displayName, const QString& username)
 
 void UsersApi::uploadAvatar(const QUrl& path)
 {
+#ifdef Q_OS_WASM
+    if(path.isEmpty())
+        QFileDialog::getOpenFileContent("Images (*.png *.jpg *.jpeg)",
+            [this](const QString& fileName, const QByteArray& fileContent)
+            {
+#endif
     const auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     QHttpPart imagePart;
     imagePart.setHeader(
         QNetworkRequest::ContentDispositionHeader,
         { u"form-data; name=\"avatar\"; filename=\"%1\""_s
-            .arg(QFileInfo(path.toString()).fileName()) }
+            .arg(
+#ifdef Q_OS_WASM
+                fileName
+#else
+                QFileInfo(path.toString()).fileName()
+#endif
+            ) }
     );
 
-#ifndef Q_OS_ANDROID
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_WASM)
     QFile file(path.toLocalFile());
-#else
+#elif !defined(Q_OS_WASM)
     QFile file(path.toString());
 #endif
+
+#ifndef Q_OS_WASM
     if(!file.open(QFile::ReadOnly))
     {
         multiPart->deleteLater();
@@ -80,7 +98,9 @@ void UsersApi::uploadAvatar(const QUrl& path)
     }
 
     imagePart.setBody(file.readAll());
-
+#else
+    imagePart.setBody(fileContent);
+#endif
     multiPart->append(imagePart);
 
     auto req = requestFactory.createRequest("/users/me/avatar");
@@ -96,5 +116,9 @@ void UsersApi::uploadAvatar(const QUrl& path)
         emit userReceived(obj);
         emit profileReceived(obj);
     });
+
+#ifdef Q_OS_WASM
+            });
+#endif
 }
 

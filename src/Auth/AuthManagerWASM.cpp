@@ -51,8 +51,7 @@ void AuthManagerWASM::refresh()
 
 void AuthManagerWASM::handleCode()
 {
-    em::val location = em::val::global("location");
-
+    const auto location = em::val::global("location");
     const auto search = QString::fromStdString(location["search"].as<std::string>());
 
     if(search.isEmpty())
@@ -146,6 +145,12 @@ void AuthManagerWASM::acceptTokens(QNetworkReply *reply)
         storage.saveTokens({ access, refresh });
 
         emit loginCompleted();
+
+        const auto location = em::val::global("location");
+        const auto search = QString::fromStdString(location["search"].as<std::string>());
+
+        if(!search.isEmpty())
+            em::val::global("eval")(u"window.location.href = window.location.origin + window.location.pathname;"_s.toStdString());
     }
     else
         qDebug() << "Token request error:" << reply->errorString();
