@@ -1,7 +1,9 @@
+import QtCore
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import Api
 
@@ -160,8 +162,24 @@ ColumnLayout {
                         spacing: 10
 
                         Avatar {
+                            id: userAvatar
+
                             avatarUrl: userProfile.avatar_url
                             size: 80
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: fileDialog.open()
+                            }
+                        }
+
+                        FileDialog {
+                            id: fileDialog
+                            currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                            onAccepted: {
+                                // Api call
+                                userAvatar.avatarUrl = selectedFile
+                            }
                         }
 
                         ColumnLayout {
