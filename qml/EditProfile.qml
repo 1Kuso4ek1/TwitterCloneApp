@@ -6,15 +6,17 @@ import QtQuick.Layouts
 import Api
 
 Popup {
-    id: newPostPopup
-    parent: Overlay.overlay
+    id: editUser
 
-    property var maxPostLength: 280
+    property var user: ({})
+    property var maxDisplayNameLength: 30
+    property var maxUsernameLength: 20
+
+    parent: Overlay.overlay
 
     anchors.centerIn: parent
 
     width: 350
-    height: contentLayout.implicitHeight + 200
 
     Material.background: Material.color(Material.Grey, Material.Shade900)
     Material.roundedScale: Material.MediumScale
@@ -24,7 +26,7 @@ Popup {
     focus: true
     dim: true
 
-    onOpened: contentArea.forceActiveFocus()
+    onOpened: displayName.forceActiveFocus()
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     ColumnLayout {
@@ -33,12 +35,10 @@ Popup {
         anchors.fill: parent
         anchors.margins: 12
 
-        spacing: 10
-
         Material.accent: Material.color(Material.Blue, Material.Shade500)
 
         Label {
-            text: "New post"
+            text: "Edit profile"
 
             Layout.alignment: Qt.AlignHCenter
 
@@ -48,34 +48,42 @@ Popup {
             color: "white"
         }
 
-        // Maybe change it to a FormField
-        TextArea {
-            id: contentArea
+        FormField {
+            id: displayName
 
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-            font.contextFontMerging: true
+            headerText: "Display name"
+            content: user.display_name || ""
+            maxLength: maxDisplayNameLength
 
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredHeight: 120
+        }
 
-            color: "white"
+        FormField {
+            id: username
 
-            placeholderText: "What's new?"
+            headerText: "Username"
+            content: user.username || ""
+            maxLength: maxUsernameLength
+
+            Layout.fillWidth: true
         }
 
         Label {
-            text: contentArea.text.trim().length + " / " + maxPostLength
+            id: errorLabel
+            visible: false
 
-            Layout.alignment: Qt.AlignRight
+            Layout.fillWidth: true
+
+            horizontalAlignment: Qt.AlignHCenter
 
             font.pixelSize: 12
-            color: contentArea.text.trim().length >= maxPostLength ? "red" : "white"
+            color: "red"
         }
 
         RowLayout {
             Layout.fillWidth: true
+
+            Layout.bottomMargin: 12
 
             spacing: 10
 
@@ -86,23 +94,26 @@ Popup {
                 Layout.preferredWidth: 100
                 Layout.alignment: Qt.AlignVCenter
 
-                onClicked: newPostPopup.close()
+                onClicked: editUser.close()
             }
 
             Button {
-                text: "Post"
+                text: "Save"
                 highlighted: true
-                enabled: contentArea.text.trim().length !== 0 && contentArea.text.trim().length <= maxPostLength
+                enabled: displayName.content.trim().length !== 0
+                    && displayName.content.trim().length <= maxDisplayNameLength
+                    && username.content.trim().length >= 5
+                    && username.content.trim().length <= maxUsernameLength
 
                 Layout.fillWidth: true
                 Layout.preferredWidth: 100
                 Layout.alignment: Qt.AlignVCenter
 
                 onClicked: {
-                    Api.posts.createPost(contentArea.text.trim())
-
-                    contentArea.clear()
-                    newPostPopup.close()
+                    // Api call
+                    // editUser.close()
+                    errorLabel.visible = true
+                    errorLabel.text = "This feature is not implemented yet."
                 }
             }
         }

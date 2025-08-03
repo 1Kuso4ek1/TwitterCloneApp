@@ -172,7 +172,7 @@ ColumnLayout {
                             Label {
                                 text: userProfile.display_name || "Unknown User"
 
-                                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                                elide: Text.ElideRight
 
                                 font.bold: true
                                 font.pixelSize: 20
@@ -204,11 +204,8 @@ ColumnLayout {
                     background: null
 
                     onClicked: {
-                        if(root.userProfile.id !== root.currentUserId) {
-                            contextMenu.visible = false
-                            contextMenu.height = 0
-                        }
-                        contextMenu.popup()
+                        if(root.userProfile.id === root.currentUserId)
+                            contextMenu.popup()
                     }
                 }
 
@@ -221,6 +218,15 @@ ColumnLayout {
                         onClicked: {
                             Navigation.pop()
                             Api.auth.logout()
+                        }
+                    }
+
+                    MenuItem {
+                        text: "Edit Profile"
+
+                        onClicked: {
+                            editProfilePopup.user = root.userProfile
+                            editProfilePopup.open()
                         }
                     }
                 }
@@ -268,5 +274,9 @@ ColumnLayout {
 
     ListModel {
         id: feedModel
+    }
+
+    EditProfile {
+        id: editProfilePopup
     }
 }

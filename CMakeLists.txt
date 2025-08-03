@@ -88,6 +88,8 @@ qt_add_qml_module(TwitterClone
         qml/Post.qml
         qml/NewPost.qml
         qml/Profile.qml
+        qml/EditProfile.qml
+        qml/FormField.qml
 )
 
 if(NOT EMSCRIPTEN)

@@ -107,10 +107,6 @@ ColumnLayout {
         Api.auth.updateLoginState()
     }
 
-    NewPost {
-        id: newPostPopup
-    }
-
     ToolBar {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignTop
@@ -221,6 +217,10 @@ ColumnLayout {
 
     ListModel {
         id: feedModel
+    }
+
+    NewPost {
+        id: newPostPopup
     }
 
     Timer {
