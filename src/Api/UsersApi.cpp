@@ -1,7 +1,7 @@
 #include "Api/UsersApi.hpp"
 
-#include <QHttpMultiPart>
 #include <QFileInfo>
+#include <QHttpMultiPart>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -58,24 +58,28 @@ void UsersApi::updateMe(const QString& displayName, const QString& username)
 void UsersApi::uploadAvatar(const QUrl& path)
 {
     const auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    const auto localFile = path.toLocalFile();
 
     QHttpPart imagePart;
     imagePart.setHeader(
         QNetworkRequest::ContentDispositionHeader,
         { u"form-data; name=\"avatar\"; filename=\"%1\""_s
-            .arg(QFileInfo(localFile).fileName()) }
+            .arg(QFileInfo(path.toString()).fileName()) }
     );
 
-    const auto file = new QFile(localFile);
-    if(!file->open(QIODevice::ReadOnly))
+#ifndef Q_OS_ANDROID
+    QFile file(path.toLocalFile());
+#else
+    QFile file(path.toString());
+#endif
+    if(!file.open(QFile::ReadOnly))
     {
-        qDebug() << "Failed to open file" << localFile;
+        multiPart->deleteLater();
+
+        qDebug() << "Failed to open file" << path;
         return;
     }
-    file->setParent(multiPart);
 
-    imagePart.setBodyDevice(file);
+    imagePart.setBody(file.readAll());
 
     multiPart->append(imagePart);
 

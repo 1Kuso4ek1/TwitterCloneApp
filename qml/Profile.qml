@@ -177,6 +177,7 @@ ColumnLayout {
                         FileDialog {
                             id: fileDialog
                             currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                            nameFilters: [ "Image files (*.png *.jpg *.jpeg)" ]
                             onAccepted: {
                                 // Api call
                                 // userAvatar.avatarUrl = selectedFile
