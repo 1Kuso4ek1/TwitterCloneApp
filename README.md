@@ -8,6 +8,7 @@ It was made using C++, Qt 6.9.1 and QML.
 * **Auth:** users login into their accounts using Google OAuth2.
 * **Feed:** check what other users are talking about.
 * **User profile:** check any profile you encounter (including yours).
+* **Customization:** pick your own display name and username, change avatar to whatever you want.
 * **Create posts:** write about your day or whatever you like and publish it.
 * **Delete posts:** if you don't like what you've written...
 * **Security:** none of the sensitive info is shared with the client (besides access/refresh tokens, lol).
@@ -52,6 +53,9 @@ It was made using C++, Qt 6.9.1 and QML.
 * `Profile.qml`: Displays user profiles with their posts.
 * `Avatar.qml`: A reusable rounded avatar component.
 * `Navigation.qml`: Singleton for managing navigation between screens.
+* `EditProfile.qml`: Profile editing popup.
+* `FormField.qml`: A reusable component for input field with header and symbol-counting footer.
+* `ImageViewer.qml`: A popup that displays whatever image you want.
 
 ## Configuration
 
