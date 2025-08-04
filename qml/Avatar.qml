@@ -16,6 +16,10 @@ Item {
 
         source: avatarUrl || "https://i.postimg.cc/HkR3vr08/ptitsa.png"
 
+        anchors.fill: parent
+
+        fillMode: Image.PreserveAspectCrop
+
         visible: false
     }
 

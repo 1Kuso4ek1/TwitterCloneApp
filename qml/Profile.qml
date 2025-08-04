@@ -161,33 +161,30 @@ ColumnLayout {
 
                         spacing: 10
 
-                        Avatar {
-                            id: userAvatar
+                        ColumnLayout {
+                            Layout.fillHeight: true
 
-                            avatarUrl: root.userProfile.avatar_url
-                            size: 80
+                            spacing: 5
 
-                            MouseArea {
-                                anchors.fill: parent
-                                enabled: root.userProfile.id === root.currentUserId
-                                onClicked: {
-                                    if(Qt.platform.os === "wasm")
-                                        Api.users.uploadAvatar("")
-                                    else
-                                        fileDialog.open()
+                            Avatar {
+                                id: userAvatar
+
+                                avatarUrl: root.userProfile.avatar_url
+                                size: 80
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        imageViewer.open()
+                                    }
                                 }
                             }
                         }
 
-                        FileDialog {
-                            id: fileDialog
-                            currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
-                            nameFilters: [ "Image files (*.png *.jpg *.jpeg)" ]
-                            onAccepted: {
-                                // Api call
-                                // userAvatar.avatarUrl = selectedFile
-                                Api.users.uploadAvatar(selectedFile)
-                            }
+                        ImageViewer {
+                            id: imageViewer
+
+                            imageUrl: root.userProfile.avatar_url
                         }
 
                         ColumnLayout {
@@ -248,12 +245,32 @@ ColumnLayout {
                     }
 
                     MenuItem {
-                        text: "Edit Profile"
+                        text: "Edit profile"
 
                         onClicked: {
                             editProfilePopup.user = root.userProfile
                             editProfilePopup.open()
                         }
+                    }
+
+                    MenuItem {
+                        text: "Upload avatar"
+
+                        onClicked: {
+                            if (Qt.platform.os === "wasm")
+                                Api.users.uploadAvatar("")
+                            else
+                                fileDialog.open()
+                        }
+                    }
+                }
+
+                FileDialog {
+                    id: fileDialog
+                    currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+                    nameFilters: [ "Image files (*.png *.jpg *.jpeg)" ]
+                    onAccepted: {
+                        Api.users.uploadAvatar(selectedFile)
                     }
                 }
             }

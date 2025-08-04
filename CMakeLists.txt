@@ -94,6 +94,7 @@ qt_add_qml_module(TwitterClone
         qml/Profile.qml
         qml/EditProfile.qml
         qml/FormField.qml
+        qml/ImageViewer.qml
 )
 
 if(NOT EMSCRIPTEN)

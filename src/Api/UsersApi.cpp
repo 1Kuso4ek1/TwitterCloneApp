@@ -1,7 +1,9 @@
 #include "Api/UsersApi.hpp"
 
+#include <QBuffer>
 #include <QFileInfo>
 #include <QHttpMultiPart>
+#include <QImage>
 
 #ifdef Q_OS_WASM
     #include <QFileDialog>
@@ -62,10 +64,9 @@ void UsersApi::updateMe(const QString& displayName, const QString& username)
 void UsersApi::uploadAvatar(const QUrl& path)
 {
 #ifdef Q_OS_WASM
-    if(path.isEmpty())
-        QFileDialog::getOpenFileContent("Images (*.png *.jpg *.jpeg)",
-            [this](const QString& fileName, const QByteArray& fileContent)
-            {
+    QFileDialog::getOpenFileContent("Images (*.png *.jpg *.jpeg)",
+        [this](const QString& fileName, const QByteArray& fileContent)
+        {
 #endif
     const auto multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
@@ -97,10 +98,24 @@ void UsersApi::uploadAvatar(const QUrl& path)
         return;
     }
 
-    imagePart.setBody(file.readAll());
+    const auto content = file.readAll();
 #else
-    imagePart.setBody(fileContent);
+    const auto& content = fileContent;
 #endif
+    QImage image;
+    image.loadFromData(content);
+    const auto scaled =
+        image.scaled(256, 256, Qt::AspectRatioMode::KeepAspectRatio, Qt::TransformationMode::SmoothTransformation);
+
+    QByteArray output;
+    QBuffer buffer(&output);
+    buffer.open(QBuffer::WriteOnly);
+
+    if(scaled.save(&buffer, "PNG"))
+        imagePart.setBody(output);
+    else
+        imagePart.setBody(content);
+
     multiPart->append(imagePart);
 
     auto req = requestFactory.createRequest("/users/me/avatar");
@@ -118,7 +133,7 @@ void UsersApi::uploadAvatar(const QUrl& path)
     });
 
 #ifdef Q_OS_WASM
-            });
+        });
 #endif
 }
 
