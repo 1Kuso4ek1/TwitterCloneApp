@@ -117,6 +117,18 @@ ColumnLayout {
 
         z: 1
 
+        Label {
+            text: "Feed"
+
+            font.pixelSize: 18
+            font.bold: true
+
+            anchors.fill: parent
+
+            verticalAlignment: Qt.AlignVCenter
+            horizontalAlignment: Qt.AlignHCenter
+        }
+
         RowLayout {
             anchors.fill: parent
 
@@ -130,17 +142,7 @@ ColumnLayout {
                 onClicked: newPostPopup.open()
             }
 
-            Label {
-                text: "Feed"
-
-                font.pixelSize: 18
-                font.bold: true
-
-                Layout.fillWidth: true
-
-                verticalAlignment: Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignHCenter
-            }
+            Item { Layout.fillWidth: true }
 
             Avatar {
                 avatarUrl: root.currentUser.avatar_url

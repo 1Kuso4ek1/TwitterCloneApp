@@ -102,6 +102,19 @@ ColumnLayout {
 
         z: 2
 
+        Label {
+            text: root.userProfile.display_name || "User Profile"
+
+            font.pixelSize: 18
+            font.bold: true
+            font.contextFontMerging: true
+
+            anchors.fill: parent
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
         RowLayout {
             anchors.fill: parent
             anchors.leftMargin: 5
@@ -116,19 +129,6 @@ ColumnLayout {
                 font.bold: true
 
                 onClicked: Navigation.pop()
-            }
-
-            Label {
-                text: root.userProfile.display_name || "User Profile"
-
-                font.pixelSize: 18
-                font.bold: true
-                font.contextFontMerging: true
-
-                Layout.fillWidth: true
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
             }
         }
     }
